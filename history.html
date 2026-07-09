@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History / Change Log - Responsive</title>
+<style>
+  /* =========================================
+     SHARED VARIABLES & BASE STYLES
+     ========================================= */
+  :root {
+    --bg: #0b0e14;
+    --panel: #11151f;
+    --panel2: #151a26;
+    --border: #232838;
+    --text: #e7e9ee;
+    --muted: #8b93a7;
+    --accent-purple: #7c5cff;
+    --accent-green: #2fbf71;
+    --accent-orange: #ff8a3d;
+    --accent-blue: #3d9cff;
+    --accent-gray: #5b6376;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+  }
+
+  /* =========================================
+     DESKTOP VIEW (Screens larger than 768px)
+     ========================================= */
+  @media (min-width: 769px) {
+    .mobile-view { display: none !important; }
+    .desktop-view { display: block; padding: 24px; }
+    
+    .wrap { max-width: 1300px; margin: 0 auto; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
+    .header h1 { font-size: 22px; font-weight: 600; }
+    .header p { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .search-box {
+      display: flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--border);
+      border-radius: 8px; padding: 9px 14px; width: 320px; color: var(--muted); font-size: 13px;
+    }
+    .search-box svg { flex-shrink: 0; opacity: .7; }
+    .btn {
+      display: flex; align-items: center; gap: 6px; border-radius: 8px; padding: 9px 16px; font-size: 13px;
+      font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--panel); color: var(--text); white-space: nowrap;
+    }
+    .btn-primary { background: linear-gradient(135deg,#6a4cff,#8a5cff); border: none; color: #fff; }
+
+    .stats { display: grid; grid-template-columns: repeat(5,1fr); gap: 14px; margin-bottom: 18px; }
+    .stat-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; display: flex; align-items: center; gap: 12px; }
+    .stat-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+    .stat-value { font-size: 20px; font-weight: 700; line-height: 1.1; }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .banner {
+      display: flex; justify-content: space-between; align-items: center; background: rgba(61,156,255,0.08);
+      border: 1px solid rgba(61,156,255,0.25); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: #9cc4ff; margin-bottom: 18px;
+    }
+    .banner span { display: flex; align-items: center; gap: 8px; }
+    .banner .clear { color: #ff8a8a; display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; }
+
+    .table-container { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .table-header-row { display: grid; grid-template-columns: 150px 190px 140px 1fr 1fr 130px; gap: 12px; padding: 12px 20px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .row { display: grid; grid-template-columns: 150px 190px 140px 1fr 1fr 130px; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--border); position: relative; align-items: center; }
+    .row:last-child { border-bottom: none; }
+    .row::before { content: ''; position: absolute; left: -1px; top: 24px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-purple); box-shadow: 0 0 0 3px rgba(124,92,255,.15); }
+    
+    .datetime .date { font-size: 13px; font-weight: 600; }
+    .datetime .time { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .datetime .ago { font-size: 11px; color: #5b6376; margin-top: 2px; }
+    
+    .content-details { display: flex; align-items: flex-start; gap: 10px; }
+    .content-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; }
+    .content-title { font-size: 13px; font-weight: 600; }
+    .content-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .content-id { font-size: 11px; color: #5b6376; margin-top: 2px; }
+    
+    .field-name { font-size: 13px; margin-bottom: 6px; }
+    .tag { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 6px; font-weight: 500; }
+    .tag-blue { background: rgba(61,156,255,.15); color: #6db4ff; }
+    .tag-purple { background: rgba(124,92,255,.15); color: #a48bff; }
+    .tag-green { background: rgba(47,191,113,.15); color: #4fe092; }
+
+    .change { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+    .change .col { flex: 1; min-width: 0; }
+    .change .label { color: #5b6376; font-size: 10px; text-transform: uppercase; margin-bottom: 4px; }
+    .change .value { color: var(--text); font-size: 12px; }
+    .arrow { color: #5b6376; flex-shrink: 0; }
+    .img-row { display: flex; align-items: center; gap: 8px; }
+    .img-row img { width: 44px; height: 44px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+    .img-meta { font-size: 10.5px; color: var(--muted); line-height: 1.4; }
+    .img-meta .fname { color: var(--text); }
+    .video-thumb { width: 44px; height: 44px; border-radius: 6px; flex-shrink: 0; background: linear-gradient(135deg,#2a2f3d,#1a1e28); display: flex; align-items: center; justify-content: center; position: relative; background-size: cover; background-position: center; }
+    .video-thumb::after { content: '▶'; color: #fff; font-size: 12px; background: rgba(0,0,0,.4); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    
+    .editor { display: flex; align-items: center; gap: 8px; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .editor-name { font-size: 12.5px; font-weight: 600; }
+    .editor-role { font-size: 11px; color: var(--muted); }
+    
+    @media (max-width: 1100px) {
+      .stats { grid-template-columns: repeat(2,1fr); }
+      .table-header-row { display: none; }
+      .row { grid-template-columns: 1fr; gap: 10px; }
+    }
+  }
+
+  /* =========================================
+     MOBILE VIEW (Screens 768px and below)
+     ========================================= */
+  @media (max-width: 768px) {
+    .desktop-view { display: none !important; }
+    .mobile-view {
+      display: block;
+      width: 100%;
+      position: relative;
+      overflow-x: hidden;
+      padding-bottom: 20px;
+    }
+
+    .statusbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px 8px; font-size: 15px; font-weight: 600; color: #fff; }
+    .statusbar .icons { display: flex; align-items: center; gap: 5px; }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .appbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px 14px; gap: 10px; }
+    .appbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .icon-btn { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--text); cursor: pointer; background: none; border: none; }
+    .appbar-title { font-size: 17px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .appbar-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    
+    .filter-btn { width: 34px; height: 34px; border-radius: 8px; background: var(--panel2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; }
+    .export-btn { display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg,#6a4cff,#8a5cff); color: #fff; font-size: 13px; font-weight: 600; padding: 8px 14px; border-radius: 9px; border: none; white-space: nowrap; }
+
+    .search-wrap { padding: 0 16px 14px; display: flex; gap: 10px; }
+    .search-box { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 11px 14px; color: var(--muted); font-size: 13.5px; }
+    .search-slider { width: 42px; height: 42px; flex-shrink: 0; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 16px 14px; }
+    .stat-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
+    .stat-card.full { grid-column: 1 / -1; }
+    .stat-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+    .stat-value { font-size: 18px; font-weight: 700; line-height: 1.1; }
+    .stat-label { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+
+    .banner { margin: 0 16px 14px; background: rgba(61,156,255,0.08); border: 1px solid rgba(61,156,255,0.25); border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #9cc4ff; }
+    .banner-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .banner .clear { color: #ff8a8a; display: flex; align-items: center; gap: 5px; white-space: nowrap; font-size: 12px; flex-shrink: 0; }
+
+    .list { padding: 0 16px; }
+    .list-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--border); position: relative; cursor: pointer; }
+    .list-row:first-child { border-top: none; }
+    .list-row::before { content: ''; position: absolute; left: -16px; top: 20px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-purple); }
+    .lr-date { width: 78px; flex-shrink: 0; }
+    .lr-date .d { font-size: 12.5px; font-weight: 600; }
+    .lr-date .t { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .lr-date .a { font-size: 10px; color: #5b6376; margin-top: 1px; }
+    .lr-icon { width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .lr-body { flex: 1; min-width: 0; }
+    .lr-type { font-size: 13.5px; font-weight: 600; }
+    .lr-sub { font-size: 12px; color: var(--muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lr-id { font-size: 10.5px; color: #5b6376; margin-top: 1px; }
+    .tag { display: inline-block; margin-top: 6px; font-size: 10.5px; padding: 3px 8px; border-radius: 6px; font-weight: 500; }
+    .tag-blue { background: rgba(61,156,255,.15); color: #6db4ff; }
+    .tag-purple { background: rgba(124,92,255,.15); color: #a48bff; }
+    .tag-green { background: rgba(47,191,113,.15); color: #4fe092; }
+    .chevron { color: #5b6376; flex-shrink: 0; }
+
+    .list-footer { padding: 16px 0 6px; font-size: 12px; color: var(--muted); text-align: center;}
+    .pagination { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 0 16px; }
+    .page-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12.5px; color: var(--text); background: var(--panel); border: 1px solid var(--border); }
+    .page-btn.active { background: var(--accent-purple); border-color: var(--accent-purple); color: #fff; }
+
+    .detail-list { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 14px; }
+    .detail-card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .dc-head { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+    .dc-icon { width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .dc-type { font-size: 12px; color: var(--muted); }
+    .dc-title { font-size: 15px; font-weight: 700; margin-top: 1px; }
+    .dc-id { font-size: 11.5px; color: #5b6376; margin-top: 2px; }
+    .dc-tag { margin: 10px 0 12px; }
+    .dc-meta { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); padding: 10px 0; border-top: 1px solid var(--border); flex-wrap: wrap; }
+    .dc-meta .dot { color: #3a4152; }
+    .dc-changed { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); padding-bottom: 10px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+    
+    .avatar-sm { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .dc-label { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .dc-field { font-size: 12.5px; color: var(--muted); margin-bottom: 10px; }
+    .compare-box { background: var(--panel2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 10px; }
+    .compare-col { flex: 1; min-width: 0; }
+    .compare-col .lbl { font-size: 10.5px; color: #5b6376; text-transform: uppercase; margin-bottom: 5px; }
+    .compare-col .val { font-size: 12.5px; line-height: 1.4; }
+    .compare-arrow { color: #5b6376; flex-shrink: 0; }
+    .compare-img { width: 100%; border-radius: 8px; margin-bottom: 6px; height: 70px; object-fit: cover; }
+    .compare-fname { font-size: 11px; color: var(--text); }
+    .compare-fmeta { font-size: 10.5px; color: var(--muted); margin-top: 1px; }
+
+    .bottomnav { display: flex; border-top: 1px solid var(--border); background: var(--bg); padding: 10px 0 22px; position: fixed; bottom: 0; width: 100%; z-index: 10; }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10.5px; color: var(--muted); }
+    .nav-item.active { color: var(--accent-purple); }
+    .nav-icon-wrap { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .nav-item.active .nav-icon-wrap { background: var(--accent-purple); color: #fff; }
+    
+    /* Give space for fixed bottomnav */
+    #screen-list, #screen-detail { padding-bottom: 80px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="desktop-view">
+    <div class="wrap">
+      <div class="header">
+        <div>
+          <h1>History / Change Log</h1>
+          <p>Complete record of all changes made across your website.</p>
+        </div>
+        <div class="header-actions">
+          <div class="search-box">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Search by keyword, title, content, editor...
+          </div>
+          <button class="btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            Filters
+          </button>
+          <button class="btn btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(124,92,255,.15);color:#a48bff;">📄</div>
+          <div><div class="stat-value">1,248</div><div class="stat-label">All time</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(47,191,113,.15);color:#4fe092;">📅</div>
+          <div><div class="stat-value">23</div><div class="stat-label">Today</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(255,138,61,.15);color:#ffab6e;">🕐</div>
+          <div><div class="stat-value">156</div><div class="stat-label">This Week</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(61,156,255,.15);color:#6db4ff;">👤</div>
+          <div><div class="stat-value">482</div><div class="stat-label">This Month</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(139,147,167,.15);color:#a3aabd;">👥</div>
+          <div><div class="stat-value">8</div><div class="stat-label">Editors</div></div>
+        </div>
+      </div>
+
+      <div class="banner">
+        <span>ℹ️ Showing all changes. Each change is saved permanently and will never be overwritten.</span>
+        <span class="clear">🗑 Clear All</span>
+      </div>
+
+      <div class="table-container">
+        <div class="table-header-row">
+          <div>Date & Time</div>
+          <div>Content Details</div>
+          <div>Field / Element</div>
+          <div>What Was Changed (Previous)</div>
+          <div>Current Value</div>
+          <div>Changed By</div>
+        </div>
+        <div id="desktop-rows"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-view">
+    <div class="statusbar">
+      <span>9:41</span>
+      <span class="icons">
+        <svg width="17" height="11" viewBox="0 0 17 11" fill="#fff"><rect x="0" y="7" width="3" height="4"/><rect x="4.5" y="5" width="3" height="6"/><rect x="9" y="3" width="3" height="8"/><rect x="13.5" y="0" width="3" height="11"/></svg>
+        <svg width="15" height="11" viewBox="0 0 16 12" fill="#fff"><path d="M8 10.5c.7 0 1.3.5 1.3 1.2S8.7 13 8 13s-1.3-.6-1.3-1.3S7.3 10.5 8 10.5zM4.5 7.8c1-1 2.2-1.5 3.5-1.5s2.5.5 3.5 1.5l-1 1c-.7-.7-1.5-1-2.5-1s-1.8.3-2.5 1l-1-1zM2 5.2C3.6 3.6 5.7 2.7 8 2.7s4.4.9 6 2.5l-1 1C11.7 4.9 9.9 4.2 8 4.2s-3.7.7-5 2l-1-1z"/></svg>
+        <svg width="24" height="11" viewBox="0 0 25 12"><rect x="1" y="1" width="20" height="10" rx="2.5" stroke="#fff" fill="none"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.5" fill="#fff"/><rect x="22" y="4" width="1.5" height="4" rx="0.7" fill="#fff"/></svg>
+      </span>
+    </div>
+
+    <div class="screen active" id="screen-list">
+      <div class="appbar">
+        <div class="appbar-left">
+          <button class="icon-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+          <div class="appbar-title">History / Change Log</div>
+        </div>
+        <div class="appbar-actions">
+          <button class="filter-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
+          <button class="export-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</button>
+        </div>
+      </div>
+
+      <div class="search-wrap">
+        <div class="search-box">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Search by keyword, title, content...
+        </div>
+        <div class="search-slider">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(124,92,255,.15);color:#a48bff;">📄</div>
+          <div><div class="stat-value">1,248</div><div class="stat-label">Total Changes</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(47,191,113,.15);color:#4fe092;">📅</div>
+          <div><div class="stat-value">23</div><div class="stat-label">Today</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(255,138,61,.15);color:#ffab6e;">🕐</div>
+          <div><div class="stat-value">156</div><div class="stat-label">This Week</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(61,156,255,.15);color:#6db4ff;">👤</div>
+          <div><div class="stat-value">482</div><div class="stat-label">This Month</div></div>
+        </div>
+        <div class="stat-card full">
+          <div class="stat-icon" style="background:rgba(139,147,167,.15);color:#a3aabd;">👥</div>
+          <div><div class="stat-value">8</div><div class="stat-label">Editors</div></div>
+        </div>
+      </div>
+
+      <div class="banner">
+        <div class="banner-row">
+          <span>ℹ️ Showing all changes. Each change is saved permanently and will never be overwritten.</span>
+        </div>
+        <div style="text-align:right;margin-top:6px;">
+          <span class="clear">🗑 Clear All</span>
+        </div>
+      </div>
+
+      <div class="list" id="listContainer"></div>
+
+      <div class="list-footer">Showing 1 to 10 of 1,248 changes</div>
+      <div class="pagination">
+        <div class="page-btn">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">3</div>
+        <div class="page-btn">...</div>
+        <div class="page-btn">125</div>
+        <div class="page-btn">›</div>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-detail">
+      <div class="appbar">
+        <div class="appbar-left">
+          <button class="icon-btn" onclick="showList()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <div class="appbar-title">Change Details</div>
+        </div>
+        <div class="appbar-actions">
+          <button class="filter-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
+          <button class="export-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</button>
+        </div>
+      </div>
+      <div class="detail-list" id="detailContainer"></div>
+    </div>
+
+    <div class="bottomnav">
+      <div class="nav-item">
+        <div class="nav-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
+        Content
+      </div>
+      <div class="nav-item active">
+        <div class="nav-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg></div>
+        History
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        Media
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+        Settings
+      </div>
+    </div>
+  </div>
+
+<script>
+// ==========================================
+// SHARED DATA & FUNCTIONS
+// ==========================================
+const data = [
+  {date:"01 Jun 2025", time:"01:00 PM", ago:"Just now", icon:"📗", iconBg:"rgba(47,191,113,.15)", iconColor:"#4fe092", type:"Poem", title:"Whispers of Nature", id:"POEM-204",
+   field:"Title", tag:"Title Updated", tagClass:"tag-blue",
+   editor:"Riya Sharma", role:"Editor", avatarColor:"#7c5cff",
+   old:{type:"text", label:"Old Title", value:"Whispers of Nature"},
+   new:{type:"text", label:"New Title", value:"Whispers in the Wind"}},
+
+  {date:"01 Jun 2025", time:"12:00 PM", ago:"1 hour ago", icon:"📕", iconBg:"rgba(124,92,255,.15)", iconColor:"#a48bff", type:"Article", title:"The Power of Positivity", id:"ART-1023",
+   field:"Cover Image", tag:"Image Updated", tagClass:"tag-green",
+   editor:"Admin", role:"Super Admin", avatarColor:"#3d9cff",
+   old:{type:"img", label:"Old Image", img:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200", fname:"mountain-old.jpg", meta:"1920 x 1080 · 312 KB"},
+   new:{type:"img", label:"New Image", img:"https://images.unsplash.com/photo-1519681393784-d120267933ba?w=200", fname:"mountain-new.jpg", meta:"1920 x 1080 · 245 KB"}},
+
+  {date:"01 Jun 2025", time:"11:00 AM", ago:"2 hours ago", icon:"📗", iconBg:"rgba(47,191,113,.15)", iconColor:"#4fe092", type:"Poem", title:"Whispers in the Wind", id:"POEM-204",
+   field:"Description", tag:"Description Updated", tagClass:"tag-purple",
+   editor:"Riya Sharma", role:"Editor", avatarColor:"#7c5cff",
+   old:{type:"text", label:"Old Description", value:"A poem about nature, soul and serenity."},
+   new:{type:"text", label:"New Description", value:"A heartfelt poem about nature, soul and inner peace."}},
+
+  {date:"01 Jun 2025", time:"10:20 AM", ago:"3 hours ago", icon:"📙", iconBg:"rgba(255,138,61,.15)", iconColor:"#ffab6e", type:"Story", title:"The Lost Village", id:"STORY-88",
+   field:"Content", tag:"Content Updated", tagClass:"tag-blue",
+   editor:"Siddharth", role:"Editor", avatarColor:"#2fbf71",
+   old:{type:"text", label:"Old Content", value:"Once upon a time in a small village..."},
+   new:{type:"text", label:"New Content", value:"Once upon a time in a quiet little village..."}},
+
+  {date:"01 Jun 2025", time:"09:45 AM", ago:"4 hours ago", icon:"📕", iconBg:"rgba(124,92,255,.15)", iconColor:"#a48bff", type:"Article", title:"Build Better Habits", id:"ART-1011",
+   field:"Featured Image", tag:"Image Updated", tagClass:"tag-green",
+   editor:"Admin", role:"Super Admin", avatarColor:"#3d9cff",
+   old:{type:"img", label:"Old Image", img:"https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=200", fname:"habits-old.jpg", meta:"1920 x 1080 · 210 KB"},
+   new:{type:"img", label:"New Image", img:"https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=200", fname:"habits-new.jpg", meta:"1920 x 1080 · 198 KB"}},
+
+  {date:"01 Jun 2025", time:"09:10 AM", ago:"4 hours ago", icon:"📗", iconBg:"rgba(47,191,113,.15)", iconColor:"#4fe092", type:"Poem", title:"Rainy Evening", id:"POEM-198",
+   field:"Background Image", tag:"Image Updated", tagClass:"tag-green",
+   editor:"Riya Sharma", role:"Editor", avatarColor:"#7c5cff",
+   old:{type:"img", label:"Old Image", img:"https://images.unsplash.com/photo-1428592953211-077101b2021b?w=200", fname:"rain-old.jpg", meta:"1920 x 1080 · 186 KB"},
+   new:{type:"img", label:"New Image", img:"https://images.unsplash.com/photo-1519692933481-e162a57d6721?w=200", fname:"rain-new.jpg", meta:"1920 x 1080 · 215 KB"}},
+
+  {date:"01 Jun 2025", time:"08:45 AM", ago:"5 hours ago", icon:"📙", iconBg:"rgba(255,138,61,.15)", iconColor:"#ffab6e", type:"Story", title:"Beyond the Hills", id:"STORY-77",
+   field:"Video", tag:"Video Updated", tagClass:"tag-blue",
+   editor:"Siddharth", role:"Editor", avatarColor:"#2fbf71",
+   old:{type:"video", label:"Old Video", img:"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=200", fname:"story-old.mp4", meta:"12.4 MB · 00:02:45"},
+   new:{type:"video", label:"New Video", img:"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=200", fname:"story-new.mp4", meta:"15.7 MB · 00:03:12"}},
+
+  {date:"01 Jun 2025", time:"08:00 AM", ago:"5 hours ago", icon:"🌐", iconBg:"rgba(139,147,167,.15)", iconColor:"#a3aabd", type:"Site Setting", title:"Website Logo", id:"Global",
+   field:"Logo", tag:"Logo Updated", tagClass:"tag-green",
+   editor:"Admin", role:"Super Admin", avatarColor:"#3d9cff",
+   old:{type:"img", label:"Old Logo", img:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200", fname:"logo-old.png", meta:"512 x 512 · 45 KB"},
+   new:{type:"img", label:"New Logo", img:"https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=200", fname:"logo-new.png", meta:"512 x 512 · 62 KB"}},
+
+  {date:"31 May 2025", time:"07:15 PM", ago:"16 hours ago", icon:"📄", iconBg:"rgba(255,138,61,.15)", iconColor:"#ffab6e", type:"Page", title:"About Us", id:"ABOUT-001",
+   field:"Card Content", tag:"Card Updated", tagClass:"tag-purple",
+   editor:"Riya Sharma", role:"Editor", avatarColor:"#7c5cff",
+   old:{type:"text", label:"Old Content", value:"We are a team of passionate writers..."},
+   new:{type:"text", label:"New Content", value:"We are a creative team sharing stories that inspire..."}},
+
+  {date:"31 May 2025", time:"05:40 PM", ago:"17 hours ago", icon:"📄", iconBg:"rgba(255,138,61,.15)", iconColor:"#ffab6e", type:"Page", title:"Homepage", id:"Global",
+   field:"Hero Background", tag:"Image Updated", tagClass:"tag-green",
+   editor:"Admin", role:"Super Admin", avatarColor:"#3d9cff",
+   old:{type:"img", label:"Old Image", img:"https://images.unsplash.com/photo-1519681393784-d120267933ba?w=200", fname:"hero-old.jpg", meta:"1920 x 1080 · 298 KB"},
+   new:{type:"img", label:"New Image", img:"https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=200", fname:"hero-new.jpg", meta:"1920 x 1080 · 305 KB"}},
+];
+
+function initials(name){
+  return name.split(" ").map(n=>n[0]).join("").slice(0,2).toUpperCase();
+}
+
+// ==========================================
+// RENDER DESKTOP LAYOUT
+// ==========================================
+function renderDesktopCol(d){
+  if(d.type === "text"){
+    return `<div class="col"><div class="label">${d.label}</div><div class="value">${d.value}</div></div>`;
+  }
+  if(d.type === "img"){
+    return `<div class="col"><div class="label">${d.label}</div>
+      <div class="img-row"><img src="${d.img}" alt=""><div class="img-meta"><div class="fname">${d.fname}</div><div>${d.meta}</div></div></div>
+    </div>`;
+  }
+  if(d.type === "video"){
+    return `<div class="col"><div class="label">${d.label}</div>
+      <div class="img-row"><div class="video-thumb" style="background-image:url('${d.img}')"></div><div class="img-meta"><div class="fname">${d.fname}</div><div>${d.meta}</div></div></div>
+    </div>`;
+  }
+}
+
+document.getElementById("desktop-rows").innerHTML = data.map(r => `
+  <div class="row">
+    <div class="datetime"><div class="date">${r.date}</div><div class="time">${r.time}</div><div class="ago">${r.ago}</div></div>
+    <div class="content-details">
+      <div class="content-icon" style="background:${r.iconBg};color:${r.iconColor};">${r.icon}</div>
+      <div><div class="content-title">${r.type}</div><div class="content-sub">${r.title}</div><div class="content-id">ID: ${r.id}</div></div>
+    </div>
+    <div><div class="field-name">${r.field}</div><span class="tag ${r.tagClass}">${r.tag}</span></div>
+    <div class="change">${renderDesktopCol(r.old)}<span class="arrow">→</span></div>
+    <div class="change">${renderDesktopCol(r.new)}</div>
+    <div class="editor">
+      <div class="avatar" style="background:${r.avatarColor};">${initials(r.editor)}</div>
+      <div><div class="editor-name">${r.editor}</div><div class="editor-role">${r.role}</div></div>
+    </div>
+  </div>
+`).join("");
+
+
+// ==========================================
+// RENDER MOBILE LAYOUT
+// ==========================================
+const listContainer = document.getElementById("listContainer");
+listContainer.innerHTML = data.map((r, idx) => `
+  <div class="list-row" onclick="showDetail(${idx})">
+    <div class="lr-date"><div class="d">${r.date}</div><div class="t">${r.time}</div><div class="a">${r.ago}</div></div>
+    <div class="lr-icon" style="background:${r.iconBg};color:${r.iconColor};">${r.icon}</div>
+    <div class="lr-body">
+      <div class="lr-type">${r.type}</div><div class="lr-sub">${r.title}</div><div class="lr-id">ID: ${r.id}</div>
+      <span class="tag ${r.tagClass}">${r.tag}</span>
+    </div>
+    <div class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+  </div>
+`).join("");
+
+function renderCompareMobile(d){
+  if(d.type === "text"){
+    return `<div class="compare-box">
+      <div class="compare-col"><div class="lbl">${d.label}</div><div class="val">${d.value}</div></div>
+      <div class="compare-arrow">→</div><div class="compare-col"></div>
+    </div>`;
+  }
+  if(d.type === "img" || d.type === "video"){
+    return `<div class="compare-col">
+      <div class="lbl">${d.label}</div><img class="compare-img" src="${d.img}" alt="">
+      <div class="compare-fname">${d.fname}</div><div class="compare-fmeta">${d.meta}</div>
+    </div>`;
+  }
+}
+
+document.getElementById("detailContainer").innerHTML = data.map(r => {
+  const isMedia = r.old.type === "img" || r.old.type === "video";
+  let bodyHtml = isMedia 
+    ? `<div class="compare-box" style="align-items:flex-start;">${renderCompareMobile(r.old)}<div class="compare-arrow" style="align-self:center;">→</div>${renderCompareMobile(r.new)}</div>`
+    : `<div class="compare-box"><div class="compare-col"><div class="lbl">${r.old.label}</div><div class="val">${r.old.value}</div></div><div class="compare-arrow">→</div><div class="compare-col"><div class="lbl">${r.new.label}</div><div class="val">${r.new.value}</div></div></div>`;
+
+  return `
+  <div class="detail-card">
+    <div class="dc-head">
+      <div class="dc-icon" style="background:${r.iconBg};color:${r.iconColor};">${r.icon}</div>
+      <div><div class="dc-type">${r.type}</div><div class="dc-title">${r.title}</div><div class="dc-id">ID: ${r.id}</div></div>
+    </div>
+    <span class="tag ${r.tagClass} dc-tag">${r.tag}</span>
+    <div class="dc-meta">📅 ${r.date}, ${r.time} <span class="dot">·</span> ${r.ago}</div>
+    <div class="dc-changed">
+      👤 Changed by <div class="avatar-sm" style="background:${r.avatarColor};">${initials(r.editor)}</div> ${r.editor} (${r.role})
+    </div>
+    <div class="dc-label">What was changed?</div>
+    <div class="dc-field">${r.field}</div>
+    ${bodyHtml}
+  </div>`;
+}).join("");
+
+function showDetail(idx){
+  document.getElementById("screen-list").classList.remove("active");
+  document.getElementById("screen-detail").classList.add("active");
+  const cards = document.getElementById("detailContainer").querySelectorAll(".detail-card");
+  if(cards[idx]) setTimeout(()=> cards[idx].scrollIntoView({behavior:"instant", block:"start"}), 0);
+}
+
+function showList(){
+  document.getElementById("screen-detail").classList.remove("active");
+  document.getElementById("screen-list").classList.add("active");
+}
+</script>
+</body>
+</html>

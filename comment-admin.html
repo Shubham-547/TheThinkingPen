@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Comments Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+:root{--bg:#0b0f19;--card:#111726;--th:#182235;--border:#1e293b;--muted:#94a3b8;--text:#fff;}
+body{background:var(--bg);color:var(--text);}
+.header-section{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:14px;}
+.title-area h1{font-size:26px;font-weight:600;display:flex;align-items:center;gap:10px;}
+.title-area p{color:var(--muted);font-size:13px;margin-top:4px;}
+.right-controls{display:flex;gap:12px;align-items:center;}
+.search-wrap{position:relative;}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);width:16px;height:16px;}
+.search-wrap input{background:#131926;border:1px solid var(--border);color:#fff;padding:9px 14px 9px 38px;border-radius:8px;width:250px;outline:none;font-size:13px;}
+.search-wrap input::placeholder{color:var(--muted);}
+.filter-btn{background:#131926;border:1px solid var(--border);color:#fff;padding:9px 14px;border-radius:8px;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;white-space:nowrap;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:22px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;display:flex;align-items:center;gap:16px;}
+.stat-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.stat-icon svg{width:22px;height:22px;}
+.s-purple{background:rgba(99,102,241,.15);color:#6366f1;}
+.s-orange{background:rgba(245,158,11,.15);color:#f59e0b;}
+.s-green{background:rgba(16,185,129,.15);color:#10b981;}
+.s-blue{background:rgba(59,130,246,.15);color:#3b82f6;}
+.stat-val{font-size:24px;font-weight:700;}
+.stat-label{font-size:13px;color:#fff;margin-top:2px;}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+table{width:100%;border-collapse:collapse;text-align:left;}
+thead tr{background:var(--th);}
+th{color:var(--muted);font-size:12px;font-weight:500;padding:14px 16px;border-bottom:1px solid var(--border);}
+td{padding:14px 16px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.02);}
+.user-cell{display:flex;align-items:center;gap:10px;}
+.av{width:36px;height:36px;border-radius:50%;background:#2d3748;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;overflow:hidden;}
+.av img{width:100%;height:100%;object-fit:cover;}
+.u-name{font-weight:500;font-size:13px;}
+.u-email{font-size:11px;color:var(--muted);margin-top:1px;}
+.c-title{font-weight:500;font-size:13px;}
+.c-by{font-size:11px;color:var(--muted);margin-top:1px;}
+.comment-text{color:#e2e8f0;max-width:340px;line-height:1.45;font-size:13px;}
+.badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:500;}
+.b-poem{background:#064e3b;color:#34d399;}
+.b-article{background:#78350f;color:#fbbf24;}
+.b-story{background:#1e3a8a;color:#60a5fa;}
+.b-other{background:#2d2d3d;color:#aaa;}
+.dot-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:4px 8px;border-radius:6px;}
+.dot-btn:hover{background:rgba(255,255,255,.08);color:#fff;}
+.pg-row{display:flex;justify-content:space-between;align-items:center;padding:16px;color:var(--muted);font-size:13px;}
+.pg-btns{display:flex;gap:4px;}
+.pg-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;background:#131926;border:1px solid var(--border);color:#fff;font-size:13px;}
+.pg-btn.active{background:#5b21b6;border-color:#5b21b6;}
+.pg-btn:hover:not(.active){background:#1e293b;}
+.empty{text-align:center;padding:40px;color:var(--muted);font-size:13px;}
+@media(max-width:768px){
+  body{padding:14px 12px 80px;}
+  .header-section{flex-direction:column;align-items:flex-start;}
+  .right-controls{width:100%;flex-direction:column;}
+  .search-wrap,.search-wrap input{width:100%;}
+  .filter-btn{width:100%;justify-content:space-between;}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .stat-val{font-size:20px;}
+  table thead{display:none;}
+  table,thead,tbody,th,td,tr{display:block;}
+  tr{padding:14px;border-bottom:1px solid var(--border);position:relative;}
+  td{padding:0;border:none;margin-bottom:10px;}
+  td:nth-child(1){display:none;}
+  td:nth-child(7){position:absolute;right:12px;top:12px;margin:0;}
+  .comment-text{max-width:100%;background:#161f30;padding:10px 12px;border-radius:8px;}
+  .pg-row{flex-direction:column;gap:10px;}
+}
+
+:root{--bg:#0d0d14;--surface:#16161f;--surface2:#1e1e2b;--surface3:#252535;--accent:#7c5cfc;--accent2:#a084ff;--gold:#f0a030;--green:#34c77b;--red:#e05c5c;--border:rgba(255,255,255,0.08);--text:#e8e8f0;--muted:#8888a0;}
+body{background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;}
+.sb{width:230px;background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 1rem;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column;}
+.sb h1{font-size:16px;margin-bottom:1.5rem;color:var(--accent2);display:flex;align-items:center;gap:8px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;margin-bottom:4px;color:var(--muted);cursor:pointer;font-size:14px;font-weight:500;transition:0.2s;}
+.nav-item:hover{background:var(--surface3);color:var(--text);}
+.nav-item.active{background:var(--accent);color:#fff;}
+.nav-item.disabled{opacity:0.4;cursor:not-allowed;pointer-events:none;}
+.nav-tag{font-size:10px;background:var(--surface3);padding:1px 6px;border-radius:8px;margin-left:auto;}
+.back-link{display:block;margin-bottom:1.5rem;color:var(--muted);font-size:13px;text-decoration:none;}
+.back-link:hover{color:var(--text);}
+.page-main{flex:1;overflow-y:auto;padding:28px;}
+@media(max-width:768px){.sb{display:none;}}
+
+</style>
+</head>
+<body>
+<div class="sb">
+    <a href="/admin-dashboard.html" class="back-link">← Back to Admin Panel</a>
+    <h1>🛡️ Admin Panel</h1>
+    <div class="nav-item" onclick="location.href='/admin-dashboard.html'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Home Page</div>
+    <div class="nav-item" onclick="location.href='/admin-dashboard.html'">📄 Article Page</div>
+    <div class="nav-item" onclick="location.href='/admin-dashboard.html'">📝 Poem Page</div>
+    <div class="nav-item" onclick="location.href='/admin-dashboard.html'">📖 Story Page</div>
+    <div class="nav-item disabled"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg> Profile Page <span class="nav-tag">soon</span></div>
+    <div class="nav-item disabled">✉️ Contact Page <span class="nav-tag">soon</span></div>
+    <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;padding:14px 12px 4px;margin-top:4px;">Menu</div>
+    <div class="nav-item " onclick="location.href='/like.html'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> Likes</div>
+    <div class="nav-item active" onclick="location.href='/comment-admin.html'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Comments</div>
+    <div class="nav-item " onclick="location.href='/report-admin.html'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg> Reports</div>
+    <div class="nav-item" onclick="location.href='/admin-dashboard.html'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg> Change History</div>
+    <div class="nav-item" onclick="location.href='/admin-dashboard.html'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Manage Admins</div>
+</div>
+<div class="page-main">
+<div class="header-section">
+  <div class="title-area">
+    <h1>
+      <svg width="24" height="24" fill="none" stroke="#a855f7" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Comments
+    </h1>
+    <p>See all comments on your poems, articles and stories</p>
+  </div>
+  <div class="right-controls">
+    <div class="search-wrap">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search-input" placeholder="Search comments..." oninput="filterTable()">
+    </div>
+    <div class="filter-btn">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      All Content
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
+  </div>
+</div>
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-icon s-purple"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div><div class="stat-val" id="total-val">—</div><div class="stat-label">Total Comments</div><div class="stat-sub">Across all content</div></div></div>
+  <div class="stat-card"><div class="stat-icon s-orange"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div><div><div class="stat-val" id="article-val">—</div><div class="stat-label">On Articles</div><div class="stat-sub">Total comments</div></div></div>
+  <div class="stat-card"><div class="stat-icon s-green"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="stat-val" id="poem-val">—</div><div class="stat-label">On Poems</div><div class="stat-sub">Total comments</div></div></div>
+  <div class="stat-card"><div class="stat-icon s-blue"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div><div class="stat-val" id="story-val">—</div><div class="stat-label">On Stories</div><div class="stat-sub">Total comments</div></div></div>
+</div>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>#</th><th>User</th><th>Comment</th><th>On Content</th><th>Type</th><th>Commented On</th><th></th></tr></thead>
+    <tbody id="table-body"><tr><td colspan="7"><div class="empty">Loading...</div></td></tr></tbody>
+  </table>
+  <div class="pg-row"><div id="pg-info"></div><div class="pg-btns" id="pg-btns"></div></div>
+</div>
+<script>
+let allRows=[],filtered=[],currentPage=1;
+const perPage=10;
+function fmt(n){n=Number(n);if(n>=1e9)return(n/1e9).toFixed(1).replace(/\.0$/,'')+'b';if(n>=1e6)return(n/1e6).toFixed(1).replace(/\.0$/,'')+'m';if(n>=1e3)return(n/1e3).toFixed(1).replace(/\.0$/,'')+'k';return n.toString();}
+function fmtDate(d){const dt=new Date(d);return dt.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})+'<br><span style="color:var(--muted);font-size:11px;">'+dt.toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit',hour12:true})+'</span>';}
+function badgeHtml(t){if(!t)return`<span class="badge b-other">Unknown</span>`;const l=t.toLowerCase();if(l==='poem')return`<span class="badge b-poem">Poem</span>`;if(l==='article')return`<span class="badge b-article">Article</span>`;if(l==='story')return`<span class="badge b-story">Story</span>`;return`<span class="badge b-other">${t}</span>`;}
+function avHtml(r){if(r.avatar_url)return`<div class="av"><img src="${r.avatar_url}" alt="" onerror="this.parentNode.textContent='${(r.username||'?')[0].toUpperCase()}'"></div>`;return`<div class="av">${(r.username||'?')[0].toUpperCase()}</div>`;}
+function renderTable(){
+  const tbody=document.getElementById('table-body');
+  const s=(currentPage-1)*perPage,e=s+perPage,page=filtered.slice(s,e);
+  if(!page.length){tbody.innerHTML=`<tr><td colspan="7"><div class="empty">No data found</div></td></tr>`;return;}
+  tbody.innerHTML=page.map((r,i)=>`<tr>
+    <td style="color:var(--muted)">${s+i+1}</td>
+    <td><div class="user-cell">${avHtml(r)}<div><div class="u-name">${r.username||'—'}</div><div class="u-email">${r.email||'—'}</div></div></div></td>
+    <td><div class="comment-text">${r.comment_text||'—'}</div></td>
+    <td><div class="c-title">${r.card_title||r.card_id||'—'}</div><div class="c-by">${r.author_name?'by '+r.author_name:''}</div></td>
+    <td>${badgeHtml(r.card_type)}</td>
+    <td style="font-size:12px;">${fmtDate(r.created_at)}</td>
+    <td><button class="dot-btn">⋮</button></td>
+  </tr>`).join('');
+  document.getElementById('pg-info').textContent=`Showing ${Math.min(s+1,filtered.length)}–${Math.min(e,filtered.length)} of ${filtered.length} comments`;
+  renderPg();
+}
+function renderPg(){const total=Math.ceil(filtered.length/perPage);const btns=document.getElementById('pg-btns');if(total<=1){btns.innerHTML='';return;}let html=`<div class="pg-btn" onclick="goPage(${currentPage-1})">‹</div>`;for(let i=1;i<=Math.min(total,5);i++)html+=`<div class="pg-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</div>`;if(total>5)html+=`<div class="pg-btn" style="cursor:default">...</div><div class="pg-btn" onclick="goPage(${total})">${total}</div>`;html+=`<div class="pg-btn" onclick="goPage(${currentPage+1})">›</div>`;btns.innerHTML=html;}
+function goPage(p){const t=Math.ceil(filtered.length/perPage);if(p<1||p>t)return;currentPage=p;renderTable();}
+function filterTable(){const q=document.getElementById('search-input').value.toLowerCase();filtered=q?allRows.filter(r=>(r.username||'').toLowerCase().includes(q)||(r.email||'').toLowerCase().includes(q)||(r.comment_text||'').toLowerCase().includes(q)||(r.card_title||'').toLowerCase().includes(q)):allRows;currentPage=1;renderTable();}
+async function loadData(){
+  try{
+    const res=await fetch('/api/admin/comments-dashboard');
+    if(res.status===401||res.status===403){document.getElementById('table-body').innerHTML=`<tr><td colspan="7"><div class="empty">Access denied. Admin login required.</div></td></tr>`;return;}
+    const data=await res.json();
+    if(!data.success){document.getElementById('table-body').innerHTML=`<tr><td colspan="7"><div class="empty">Failed to load data.</div></td></tr>`;return;}
+    document.getElementById('total-val').textContent=fmt(data.total);
+    let art=0,poem=0,story=0;
+    (data.typeCounts||[]).forEach(t=>{const n=(t.badge_text||'').toLowerCase();if(n==='article')art=t.cnt;else if(n==='poem')poem=t.cnt;else if(n==='story')story=t.cnt;});
+    document.getElementById('article-val').textContent=fmt(art);
+    document.getElementById('poem-val').textContent=fmt(poem);
+    document.getElementById('story-val').textContent=fmt(story);
+    allRows=data.rows||[];filtered=[...allRows];renderTable();
+  }catch(e){document.getElementById('table-body').innerHTML=`<tr><td colspan="7"><div class="empty">Network error.</div></td></tr>`;}
+}
+loadData();
+</script>
+</div>
+</body>
+</html>

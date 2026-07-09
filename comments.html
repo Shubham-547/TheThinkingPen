@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comments</title>
+<style>
+/* ===== ROOT ===== */
+:root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #272727;
+    --surface3: #3f3f3f;
+    --border: rgba(255,255,255,0.1);
+    --text: #f1f1f1;
+    --muted: #aaaaaa;
+    --accent: #3ea6ff;
+    --red: #ff4e45;
+    --green: #2ba640;
+    --radius: 24px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Roboto', -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== DESKTOP LAYOUT (YouTube dark sidebar style) ===== */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 860px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 16px;
+}
+
+/* ===== HEADER ===== */
+.comments-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 0 16px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+}
+.back-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text);
+    font-size: 18px;
+    transition: background 0.2s;
+    flex-shrink: 0;
+    text-decoration: none;
+}
+.back-btn:hover { background: var(--surface2); }
+.header-info { flex: 1; min-width: 0; }
+.header-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.2;
+}
+.header-count {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 2px;
+}
+.sort-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text); font-size: 22px;
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+.sort-btn:hover { background: var(--surface2); }
+
+/* ===== POST INPUT AREA ===== */
+.comment-input-area {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 16px 0 12px;
+    border-bottom: 1px solid var(--border);
+}
+.user-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--surface3);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600; color: var(--text);
+    overflow: hidden;
+    text-transform: uppercase;
+}
+.user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.input-wrap { flex: 1; }
+.comment-input {
+    width: 100%;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--surface3);
+    color: var(--text);
+    font-size: 14px;
+    padding: 8px 0;
+    outline: none;
+    resize: none;
+    font-family: inherit;
+    min-height: 36px;
+    max-height: 120px;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+    overflow: hidden;
+}
+.comment-input:focus { border-bottom-color: var(--text); }
+.comment-input::placeholder { color: var(--muted); }
+.input-actions {
+    display: none;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+}
+.input-actions.visible { display: flex; }
+.btn-cancel {
+    background: none; border: none; cursor: pointer;
+    color: var(--text); font-size: 13px; font-weight: 500;
+    padding: 8px 14px; border-radius: 20px;
+    transition: background 0.2s;
+}
+.btn-cancel:hover { background: var(--surface2); }
+.btn-post {
+    background: var(--accent); border: none; cursor: pointer;
+    color: #0f0f0f; font-size: 13px; font-weight: 700;
+    padding: 8px 16px; border-radius: 20px;
+    transition: opacity 0.2s;
+    opacity: 0.5;
+    pointer-events: none;
+}
+.btn-post.active { opacity: 1; pointer-events: all; }
+.login-prompt {
+    flex: 1;
+    display: flex; align-items: center;
+    font-size: 13px; color: var(--muted);
+    gap: 8px;
+}
+.login-prompt a {
+    color: var(--accent); text-decoration: none; font-weight: 500;
+}
+.login-prompt a:hover { text-decoration: underline; }
+
+/* ===== COMMENTS LIST ===== */
+.comments-list {
+    padding: 8px 0;
+    flex: 1;
+}
+.comment-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    animation: fadeIn 0.25s ease;
+}
+.comment-item:last-child { border-bottom: none; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.comment-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--surface3);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: var(--text);
+    overflow: hidden;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.comment-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.comment-body { flex: 1; min-width: 0; }
+.comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+}
+.comment-username {
+    font-size: 13px; font-weight: 500;
+    color: var(--text);
+}
+.comment-email {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface2);
+    padding: 1px 7px; border-radius: 10px;
+}
+.comment-time {
+    font-size: 12px;
+    color: var(--muted);
+}
+.comment-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.55;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+.comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+}
+.action-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--muted); font-size: 12px;
+    display: flex; align-items: center; gap: 5px;
+    padding: 4px 8px; border-radius: 20px;
+    transition: background 0.2s, color 0.2s;
+}
+.action-btn:hover { background: var(--surface2); color: var(--text); }
+.action-btn svg { width: 16px; height: 16px; fill: currentColor; }
+.delete-btn {
+    color: var(--red); margin-left: auto;
+}
+.delete-btn:hover { background: rgba(255,78,69,0.1); }
+
+/* ===== EMPTY / LOADING / ERROR ===== */
+.state-msg {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-size: 14px;
+}
+.state-msg .emoji { font-size: 40px; margin-bottom: 12px; }
+.state-msg p { margin-top: 6px; }
+
+.skeleton {
+    background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 4px;
+}
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.skeleton-row { display:flex; gap:12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.skeleton-avatar { width:36px; height:36px; border-radius:50%; flex-shrink:0; }
+.skeleton-content { flex:1; }
+.skeleton-line { height:12px; margin-bottom:8px; }
+.skeleton-line.short { width: 40%; }
+.skeleton-line.medium { width: 70%; }
+.skeleton-line.long { width: 90%; }
+
+/* ===== MOBILE SHEET STYLE ===== */
+/* On mobile, this page looks like a bottom sheet — matches the 2nd screenshot */
+@media (max-width: 640px) {
+    body {
+        background: rgba(0,0,0,0.6);
+    }
+    .page-wrapper {
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        max-width: 100%;
+        height: 85vh;
+        background: #212121;
+        border-radius: 16px 16px 0 0;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        overflow: hidden;
+        margin: 0;
+    }
+    .drag-handle {
+        display: flex;
+        justify-content: center;
+        padding: 10px 0 4px;
+        flex-shrink: 0;
+    }
+    .drag-handle-bar {
+        width: 40px; height: 4px;
+        background: var(--surface3);
+        border-radius: 2px;
+    }
+    .comments-header {
+        padding: 8px 16px 12px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+        top: auto;
+        background: #212121;
+    }
+    .header-title { font-size: 16px; }
+    .comment-input-area { padding: 12px 16px; }
+    .comments-list { padding: 0 16px; overflow-y: auto; flex: 1; }
+    .comment-email { display: none; }
+    .back-btn { display: none; }
+    .close-btn-mobile {
+        display: flex !important;
+    }
+}
+.close-btn-mobile {
+    display: none;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: none; border: none;
+    cursor: pointer; color: var(--text);
+    font-size: 20px;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-left: auto;
+    transition: background 0.2s;
+}
+.close-btn-mobile:hover { background: var(--surface2); }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+
+/* ===== CHAR COUNTER ===== */
+.char-counter {
+    font-size: 11px; color: var(--muted);
+    text-align: right; margin-top: 4px;
+    display: none;
+}
+.char-counter.visible { display: block; }
+.char-counter.warn { color: var(--red); }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper" id="page-wrapper">
+
+    <!-- Drag handle (mobile only) -->
+    <div class="drag-handle" id="drag-handle">
+        <div class="drag-handle-bar"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="comments-header">
+        <a href="javascript:history.back()" class="back-btn" title="Back">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </a>
+        <div class="header-info">
+            <div class="header-title">Comments</div>
+            <div class="header-count" id="comment-count">Loading...</div>
+        </div>
+        <button class="sort-btn" title="Sort comments" onclick="toggleSort()">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/></svg>
+        </button>
+        <button class="close-btn-mobile" onclick="goBack()" title="Close">✕</button>
+    </div>
+
+    <!-- Comment input -->
+    <div class="comment-input-area" id="comment-input-area">
+        <div class="user-avatar" id="my-avatar">?</div>
+        <div class="input-wrap" id="input-wrap">
+            <!-- Will be replaced with login prompt if not logged in -->
+            <textarea
+                class="comment-input"
+                id="comment-textarea"
+                placeholder="Add a comment..."
+                rows="1"
+                maxlength="10000"
+                oninput="onInputChange(this)"
+                onfocus="onInputFocus()"
+            ></textarea>
+            <div class="char-counter" id="char-counter">0 / 1000</div>
+            <div class="input-actions" id="input-actions">
+                <button class="btn-cancel" onclick="cancelComment()">Cancel</button>
+                <button class="btn-post" id="btn-post" onclick="postComment()">Comment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments list -->
+    <div class="comments-list" id="comments-list">
+        <!-- Skeleton loading -->
+        <div id="skeleton-loader">
+            <div class="skeleton-row">
+                <div class="skeleton skeleton-avatar"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton skeleton-line short"></div>
+                    <div class="skeleton skeleton-line long"></div>
+                    <div class="skeleton skeleton-line medium"></div>
+                </div>
+            </div>
+            <div class="skeleton-row">
+                <div class="skeleton skeleton-avatar"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton skeleton-line short"></div>
+                    <div class="skeleton skeleton-line medium"></div>
+                </div>
+            </div>
+            <div class="skeleton-row">
+                <div class="skeleton skeleton-avatar"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton skeleton-line short"></div>
+                    <div class="skeleton skeleton-line long"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// ===== STATE =====
+let CARD_ID = null;
+let CURRENT_USER = null;
+let allComments = [];
+let sortOrder = 'newest'; // 'newest' | 'oldest'
+
+// ===== INIT =====
+window.onload = async function() {
+    // card_id URL param se uthana
+    const params = new URLSearchParams(window.location.search);
+    CARD_ID = params.get('card_id');
+
+    if (!CARD_ID) {
+        showError("No post specified.");
+        return;
+    }
+
+    // Check login
+    await fetchCurrentUser();
+
+    // Load comments
+    await loadComments();
+
+    // Mobile: back button on overlay click
+    if (window.innerWidth <= 640) {
+        document.body.addEventListener('click', function(e) {
+            if (e.target === document.body) goBack();
+        });
+    }
+};
+
+async function fetchCurrentUser() {
+    try {
+        const res = await fetch('/api/user/profile-data');
+        const data = await res.json();
+        if (data.success) {
+            CURRENT_USER = data;
+            renderMyAvatar();
+        } else {
+            showLoginPrompt();
+        }
+    } catch(e) {
+        showLoginPrompt();
+    }
+}
+
+function renderMyAvatar() {
+    const av = document.getElementById('my-avatar');
+    if (CURRENT_USER.avatarUrl) {
+        av.innerHTML = `<img src="${escapeHtml(CURRENT_USER.avatarUrl)}" alt="">`;
+    } else {
+        av.textContent = (CURRENT_USER.username || '?')[0].toUpperCase();
+    }
+}
+
+function showLoginPrompt() {
+    const inputWrap = document.getElementById('input-wrap');
+    inputWrap.innerHTML = `
+        <div class="login-prompt">
+            <a href="/">Sign in</a> to add a comment
+        </div>
+    `;
+    const av = document.getElementById('my-avatar');
+    av.textContent = '?';
+}
+
+// ===== LOAD COMMENTS =====
+async function loadComments() {
+    try {
+        const res = await fetch(`/api/comments/${CARD_ID}`);
+        const data = await res.json();
+        if (!data.success) { showError("Failed to load comments."); return; }
+        allComments = data.data || [];
+        renderComments();
+    } catch(e) {
+        showError("Network error. Please try again.");
+    }
+}
+
+function renderComments() {
+    const list = document.getElementById('comments-list');
+    const sorted = [...allComments].sort((a, b) => {
+        return sortOrder === 'newest'
+            ? new Date(b.created_at) - new Date(a.created_at)
+            : new Date(a.created_at) - new Date(b.created_at);
+    });
+
+    document.getElementById('comment-count').textContent = `${allComments.length} comment${allComments.length !== 1 ? 's' : ''}`;
+
+    if (sorted.length === 0) {
+        list.innerHTML = `
+            <div class="state-msg">
+                <div class="emoji">💬</div>
+                <div>No comments yet</div>
+                <p>Be the first to share your thoughts!</p>
+            </div>`;
+        return;
+    }
+
+    list.innerHTML = sorted.map(c => renderCommentItem(c)).join('');
+}
+
+function renderCommentItem(c) {
+    const isOwn = CURRENT_USER && CURRENT_USER.databaseId === c.uniqueId;
+    const avatarHtml = c.avatar_url
+        ? `<img src="${escapeHtml(c.avatar_url)}" alt="" onerror="this.parentNode.textContent='${escapeHtml((c.username||'?')[0]).toUpperCase()}';">`
+        : escapeHtml((c.username || '?')[0].toUpperCase());
+
+    const emailBadge = '';
+    const timeStr = formatTime(c.created_at);
+
+    const deleteBtn = isOwn ? `
+        <button class="action-btn delete-btn" onclick="deleteComment(${c.id})" title="Delete comment">
+            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+        </button>` : '';
+
+    return `
+    <div class="comment-item" id="comment-${c.id}">
+        <div class="comment-avatar">${avatarHtml}</div>
+        <div class="comment-body">
+            <div class="comment-meta">
+                <span class="comment-username">${escapeHtml(c.username)}</span>
+                ${emailBadge}
+                <span class="comment-time">${timeStr}</span>
+            </div>
+            <div class="comment-text">${escapeHtml(c.comment_text)}</div>
+            <div class="comment-actions">
+                <button class="action-btn" title="Like">
+                    <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                </button>
+                <button class="action-btn" title="Dislike">
+                    <svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L10.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                </button>
+                <button class="action-btn" title="Reply">Reply</button>
+                ${deleteBtn}
+            </div>
+        </div>
+    </div>`;
+}
+
+// ===== POST COMMENT =====
+function onInputFocus() {
+    if (!CURRENT_USER) return;
+    document.getElementById('input-actions').classList.add('visible');
+    document.getElementById('char-counter').classList.add('visible');
+}
+
+function onInputChange(el) {
+    const len = el.value.length;
+    const counter = document.getElementById('char-counter');
+    counter.textContent = `${len} / 1000`;
+    counter.classList.toggle('warn', len > 900);
+
+    const btn = document.getElementById('btn-post');
+    if (el.value.trim().length > 0) {
+        btn.classList.add('active');
+    } else {
+        btn.classList.remove('active');
+    }
+
+    // Auto resize
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function cancelComment() {
+    const ta = document.getElementById('comment-textarea');
+    if (ta) ta.value = '';
+    document.getElementById('input-actions').classList.remove('visible');
+    document.getElementById('char-counter').classList.remove('visible');
+    const btn = document.getElementById('btn-post');
+    if (btn) btn.classList.remove('active');
+    if (ta) { ta.style.height = 'auto'; ta.blur(); }
+}
+
+async function postComment() {
+    const ta = document.getElementById('comment-textarea');
+    const text = ta ? ta.value.trim() : '';
+    if (!text || !CURRENT_USER) return;
+
+    const btn = document.getElementById('btn-post');
+    btn.textContent = 'Posting...';
+    btn.classList.remove('active');
+
+    try {
+        const res = await fetch('/api/comments/post', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ card_id: CARD_ID, comment_text: text })
+        });
+        const data = await res.json();
+        if (data.success) {
+            allComments.unshift(data.comment);
+            renderComments();
+            cancelComment();
+        } else {
+            alert(data.message || "Failed to post comment.");
+        }
+    } catch(e) {
+        alert("Network error. Please try again.");
+    }
+
+    btn.textContent = 'Comment';
+    btn.classList.add('active');
+}
+
+// ===== DELETE COMMENT =====
+async function deleteComment(commentId) {
+    if (!confirm("Delete this comment?")) return;
+    try {
+        const res = await fetch('/api/comments/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ comment_id: commentId })
+        });
+        const data = await res.json();
+        if (data.success) {
+            allComments = allComments.filter(c => c.id !== commentId);
+            renderComments();
+        } else {
+            alert(data.message || "Failed to delete comment.");
+        }
+    } catch(e) {
+        alert("Network error.");
+    }
+}
+
+// ===== SORT =====
+function toggleSort() {
+    sortOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
+    renderComments();
+}
+
+// ===== HELPERS =====
+function formatTime(dateStr) {
+    const now = new Date();
+    const date = new Date(dateStr);
+    const diff = Math.floor((now - date) / 1000); // seconds
+
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return `${Math.floor(diff/60)} minute${Math.floor(diff/60)!==1?'s':''} ago`;
+    if (diff < 86400) return `${Math.floor(diff/3600)} hour${Math.floor(diff/3600)!==1?'s':''} ago`;
+    if (diff < 604800) return `${Math.floor(diff/86400)} day${Math.floor(diff/86400)!==1?'s':''} ago`;
+
+    // Older than a week: show full date + time (Indian format)
+    return date.toLocaleString('en-IN', {
+        day: 'numeric', month: 'short', year: 'numeric',
+        hour: 'numeric', minute: '2-digit', hour12: true
+    });
+}
+
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function showError(msg) {
+    document.getElementById('skeleton-loader') && (document.getElementById('skeleton-loader').remove());
+    document.getElementById('comments-list').innerHTML = `
+        <div class="state-msg">
+            <div class="emoji">⚠️</div>
+            <div>${escapeHtml(msg)}</div>
+        </div>`;
+    document.getElementById('comment-count').textContent = '';
+}
+
+function goBack() {
+    history.back();
+}
+</script>
+</body>
+</html>

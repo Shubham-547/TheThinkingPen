@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+
+    <div class="toast" id="toast"></div>
+    
+    <div class="page-content">
+        <button class="btn btn-ghost btn-sm" style="margin-bottom: 1.5rem;" onclick="window.location.href='/newfile.html'">← Back</button>
+                
+            <div class="card" style="text-align: center; padding: 2.5rem 2rem; margin-bottom: 1.25rem;">
+                
+                <div class="avatar-container-block">
+                    <img src="default-avatar.png" id="profile-avatar" class="avatar-large" alt="User Avatar" onclick="toggleAvatarMenu(event)">
+                    
+                    <div class="avatar-vertical-menu" id="avatarMenu">
+                        <button type="button" onclick="viewPhoto()">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" width="24px" viewBox="0 0 512 512" class="ionicon"><path d="M255.66 112c-77.94 0-157.89 45.11-220.83 135.33a16 16 0 0 0-.27 17.77C82.92 340.8 161.8 400 255.66 400c92.84 0 173.34-59.38 221.79-135.25a16.14 16.14 0 0 0 0-17.47C428.89 172.28 347.8 112 255.66 112" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32px"/><circle cx="256" cy="256" r="80" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32px"/></svg> View Photo
+                        </button>
+                                
+                        <button onclick="triggerImage_Upload()">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="ionicon" width="24" height="24"><rect width="416" height="352" x="48" y="80" rx="48" ry="48" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32px"/><circle cx="336" cy="176" r="32" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32px"/><path d="m304 335.79-90.66-90.49a32 32 0 0 0-43.87-1.3L48 352M224 432l123.34-123.34a32 32 0 0 1 43.11-2L464 368" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32px"/></svg> Photo
+                        </button>
+
+                        <button onclick="triggerImageUpload()" style="color: gray;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="ionicon" height="24px" width="24px" fill="gray">
+                                <path d="M724-333q0 98-68 165.5T490.84-100q-98.17 0-166-67.5Q257-235 257-333v-363q0-69 47.59-116.5t117-47.5q69.41 0 116.91 47.5T586-696v348q0 38.69-28 66.85Q530-253 490.92-253q-39.07 0-67.5-27.65Q395-308.31 395-348v-324h53v324q0 17.1 12.5 29.55T490-306q17 0 30-12.45T533-348v-349q1-46-32-78t-79-32q-46 0-79 32.55T310-696v363q1 75 53.41 127.5Q415.83-153 491.42-153 566-153 619-205.5T670-333v-371h54v371Z"/>
+                            </svg> Upload File
+                        </button>
+       
+                        <div class="horizonaly-division">
+                            <hr class="horizonaly-division-line">
+                        </div>
+
+                        <button type="button" onclick="removeAvatar()" style="color: var(--red);">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="ionicon-s" height="24px" width="24px" fill="var(--red)">
+                                <path d="M308-140q-37 0-61.5-24.5T222-226v-498h-40v-54h176v-36h246v36h176v54h-40v498q0 36.73-24.64 61.36Q690.72-140 654-140H308Zm378-584H276v498q0 14 9 23t23 9h346q12 0 22-10t10-22v-498ZM381-275h54v-368h-54v368Zm146 0h54v-368h-54v368ZM276-724v530-530Z"/>
+                            </svg> Remove Photo
+                        </button>
+                    </div>
+                </div>
+
+                <h2 id="display-name" style="margin-top: 15px; font-size: 22px; color: var(--text);"></h2>
+
+                <span id="admin-badge" class="tag tag-purple" style="display: none; margin-top: 8px;">⚙ Admin</span>
+            </div>
+
+            <div class="card" style="margin-bottom: 1.25rem;">
+                <div class="section-title">Account Details</div>
+                <div class="detail-list">
+                    <div class="detail-row">
+                        <span class="detail-label">👤 Username</span>
+                        <span id="user-username" class="detail-value-bold"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">🆔 User ID</span>
+                        <span id="user-id" class="detail-value-mono"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">📧 Email</span>
+                        <span id="user-email" class="detail-value-bold"></span>
+                    </div>
+                    <div class="detail-row" style="border-bottom: none;">
+                        <span class="detail-label">📅 Joined</span>
+                        <span id="user-joined" class="detail-value-bold"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 1.25rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                    <div class="section-title" style="margin-bottom: 0;">Level Progress</div>
+                    <span id="progress-level-text" style="font-size: 13px; font-weight: 600; color: var(--muted);">🌱 Starter</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%; background: var(--muted);"></div>
+                </div>
+                <div id="progress-subtext" style="font-size: 12px; color: var(--muted);">Points tracking is inactive</div>
+            </div>
+
+            <div class="stats-grid" style="margin-bottom: 1.25rem;">
+                <div class="stat-card">
+                    <div class="stat-label">Total Points</div>
+                    <div id="stat-total-points" class="stat-val" style="color: var(--gold);">0</div>
+                    <div class="stat-sub">⭐ lifetime</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Wallet Value</div>
+                    <div id="stat-wallet-value" class="stat-val" style="color: var(--green);">₹0.00</div>
+                    <div class="stat-sub">10 pts = ₹1</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">This Month</div>
+                    <div id="stat-month-points" class="stat-val" style="color: var(--accent2);">0</div>
+                    <div class="stat-sub">📅 earned</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Redeemed</div>
+                    <div id="stat-redeemed-points" class="stat-val">0</div>
+                    <div class="stat-sub">📦 pts spent</div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 1.25rem;">
+                <div class="section-title">Quick Actions</div>
+                <div class="actions-list">
+                    <button class="btn btn-ghost action-btn" onclick="window.location.href='/newfile.html'">🎁 My Rewards &amp; Redemption</button>
+                    <button class="btn btn-ghost action-btn" onclick="window.location.href='/newfile.html'">▶️ Watch Videos &amp; Earn Points</button>
+                    <button class="btn btn-ghost action-btn" onclick="window.location.href='/newfile.html'">🏷️ Browse Offers</button>
+                    <button class="btn btn-ghost action-btn" onclick="window.location.href='/newfile.html'">👥 Friends &amp; Chat</button>
+                </div>
+            </div>
+
+            <div id="admin-panel-card" class="card" style="display: none; margin-bottom: 1.25rem; border: 1px solid var(--red); background: rgba(224,92,92,0.05);">
+                <div class="section-title" style="color: var(--red); display: flex; align-items: center; gap: 8px;">🛡️ ADMIN CONTROL PANEL</div>
+                <p style="font-size: 0.9em; color: var(--muted); margin-bottom: 15px;">Welcome Admin. You have special privileges to modify profile details.</p>
+                <button class="btn btn-danger" onclick="window.location.href='/admin-dashboard.html'">⚙ Open Admin Panel</button>
+            </div>
+
+            <button type="button" class="logout-btn" onclick="executeLogout()">Log Out</button>
+        </div>
+
+    </div>
+
+    <script src="profile.js"></script>
+    
+</body>
+</html>

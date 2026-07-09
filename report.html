@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:"Roboto",Arial,sans-serif; }
+
+        body {
+            background-color:#f9f9f9;
+            display:flex; justify-content:center; align-items:center; min-height:100vh;
+        }
+
+        .modal {
+            background:#ffffff; width:100%; max-width:680px;
+            border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15);
+            padding:24px; display:flex; flex-direction:column;
+        }
+        .drag-handle { display:none; }
+
+        .header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+        .header h2 { font-size:20px; font-weight:500; color:#0f0f0f; order:1; }
+        .close-icon {
+            font-size:22px; color:#606060; cursor:pointer; order:2;
+            width:36px; height:36px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            transition:background 0.15s;
+        }
+        .close-icon:hover { background:#e5e5e5; }
+
+        .sub-header { font-size:15px; color:#0f0f0f; margin-bottom:16px; }
+
+        .main-content { display:flex; gap:24px; }
+        .options-column { flex:1; }
+
+        .radio-option {
+            display:flex; align-items:center; margin-bottom:14px;
+            cursor:pointer; font-size:14px; color:#0f0f0f;
+        }
+        .radio-option input[type="radio"] {
+            width:20px; height:20px; margin-right:14px;
+            accent-color:#065fd4; cursor:pointer; flex-shrink:0;
+        }
+        .radio-label { flex:1; }
+        .help-icon {
+            display:inline-flex; justify-content:center; align-items:center;
+            width:16px; height:16px; border:1px solid #909090; border-radius:50%;
+            color:#606060; font-size:11px; margin-left:8px; cursor:pointer; flex-shrink:0;
+        }
+
+        /* Other — text box */
+        .other-box {
+            display:none; margin-top:8px; margin-left:34px;
+        }
+        .other-box.show { display:block; }
+        .other-textarea {
+            width:100%; border:1px solid #ccc; border-radius:6px;
+            padding:10px 12px; font-size:13px; color:#0f0f0f;
+            resize:vertical; min-height:80px; outline:none;
+            font-family:inherit; transition:border-color 0.15s;
+        }
+        .other-textarea:focus { border-color:#065fd4; }
+        .other-textarea::placeholder { color:#aaa; }
+
+        /* Right: card preview */
+        .media-column { width:240px; display:flex; flex-direction:column; }
+        .thumbnail {
+            width:100%; height:135px; background-color:#e5e5e5;
+            border-radius:8px; display:flex; justify-content:center;
+            align-items:center; margin-bottom:12px; overflow:hidden;
+        }
+        .thumbnail img { width:100%; height:100%; object-fit:cover; }
+        .media-text .title { font-size:14px; font-weight:500; color:#0f0f0f; margin-bottom:4px; }
+        .media-text .channel { font-size:13px; color:#606060; }
+
+        /* Footer */
+        .bottom-section { margin-top:20px; border-top:1px solid #e5e5e5; padding-top:16px; }
+        .checkbox-container {
+            display:flex; align-items:center; font-size:14px;
+            color:#0f0f0f; cursor:pointer;
+        }
+        .checkbox-container input[type="checkbox"] { width:18px; height:18px; margin-right:14px; cursor:pointer; }
+        .copyright-text { display:none; font-size:12px; color:#606060; margin-top:16px; line-height:1.5; }
+        .copyright-text a { color:#065fd4; text-decoration:none; }
+
+        .actions { display:flex; justify-content:flex-end; gap:8px; margin-top:16px; align-items:center; }
+
+        .cancel-btn {
+            background:transparent; border:none; color:#065fd4;
+            font-weight:500; font-size:14px; padding:10px 16px;
+            border-radius:18px; cursor:pointer; transition:background 0.15s;
+        }
+        .cancel-btn:hover { background:rgba(6,95,212,0.08); }
+
+        .report-btn {
+            background:#f2f2f2; border:none; color:#909090;
+            font-weight:500; font-size:14px; padding:10px 20px;
+            border-radius:18px; cursor:not-allowed; transition:all 0.2s;
+        }
+        .report-btn.active {
+            background:#cc0000; color:#ffffff; cursor:pointer;
+        }
+        .report-btn.active:hover { background:#aa0000; }
+
+        /* Success screen */
+        .success-screen {
+            display:none; flex-direction:column;
+            align-items:center; text-align:center; padding:30px 0 10px;
+        }
+        .success-screen .s-icon { font-size:48px; margin-bottom:14px; }
+        .success-screen .s-title { font-size:18px; font-weight:600; color:#0f0f0f; margin-bottom:8px; }
+        .success-screen .s-sub { font-size:14px; color:#606060; line-height:1.5; }
+        .done-btn {
+            margin-top:20px; background:#065fd4; border:none;
+            color:#fff; font-size:14px; font-weight:500;
+            padding:10px 28px; border-radius:18px; cursor:pointer;
+            transition:background 0.15s;
+        }
+        .done-btn:hover { background:#0356c5; }
+
+        /* ── MOBILE ── */
+        @media (max-width:600px) {
+            body { align-items:flex-end; background-color:rgba(0,0,0,0.5); }
+            .modal {
+                max-width:100%; border-radius:16px 16px 0 0;
+                padding:16px; height:95vh; overflow-y:auto;
+            }
+            .drag-handle {
+                display:block; width:40px; height:4px;
+                background:#e0e0e0; border-radius:2px;
+                margin:0 auto 16px auto;
+            }
+            .header { justify-content:flex-start; gap:14px; margin-bottom:20px; }
+            .header h2 { order:2; font-size:18px; }
+            .close-icon { order:1; }
+            .main-content { flex-direction:column; gap:16px; }
+            .media-column {
+                width:100%; flex-direction:row; align-items:center;
+                gap:14px; border-top:1px solid #e5e5e5; padding-top:16px;
+            }
+            .thumbnail { width:120px; height:68px; margin-bottom:0; flex-shrink:0; }
+            .copyright-text { display:block; }
+            .actions { justify-content:flex-end; gap:14px; margin-top:20px; margin-bottom:10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="modal" id="report-modal">
+    <div class="drag-handle"></div>
+
+    <!-- MAIN SCREEN -->
+    <div id="main-screen">
+        <div class="header">
+            <span class="close-icon" id="close-btn" onclick="goBack()" title="Close">&#10005;</span>
+            <h2>Report content</h2>
+        </div>
+
+        <p class="sub-header">What is the issue?*</p>
+
+        <div class="main-content">
+            <!-- Options -->
+            <div class="options-column">
+                <label class="radio-option">
+                    <input type="radio" name="report_reason" value="Misinformation / Fake News" onchange="onSelect(this)">
+                    <span class="radio-label">Misinformation / Fake News</span><span class="help-icon">?</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="report_reason" value="Plagiarism / Copied Content" onchange="onSelect(this)">
+                    <span class="radio-label">Plagiarism / Copied Content</span><span class="help-icon">?</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="report_reason" value="Hate Speech / Harassment" onchange="onSelect(this)">
+                    <span class="radio-label">Hate Speech / Harassment</span><span class="help-icon">?</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="report_reason" value="Low Quality / Gibberish" onchange="onSelect(this)">
+                    <span class="radio-label">Low Quality / Gibberish</span><span class="help-icon">?</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="report_reason" value="Spam or misleading" onchange="onSelect(this)">
+                    <span class="radio-label">Spam or misleading</span><span class="help-icon">?</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="report_reason" value="Harmful or dangerous content" onchange="onSelect(this)">
+                    <span class="radio-label">Harmful or dangerous content</span><span class="help-icon">?</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="report_reason" value="Child safety concern" onchange="onSelect(this)">
+                    <span class="radio-label">Child safety concern</span><span class="help-icon">?</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="report_reason" value="Infringes my rights" onchange="onSelect(this)">
+                    <span class="radio-label">Infringes my rights</span><span class="help-icon">?</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="report_reason" value="Captions issue" onchange="onSelect(this)">
+                    <span class="radio-label">Captions issue</span><span class="help-icon">?</span>
+                </label>
+                <!-- Other option -->
+                <label class="radio-option">
+                    <input type="radio" name="report_reason" value="Other" onchange="onSelect(this)">
+                    <span class="radio-label">Other</span><span class="help-icon">?</span>
+                </label>
+                <!-- Other text box — shows when Other selected -->
+                <div class="other-box" id="other-box">
+                    <textarea class="other-textarea" id="other-text" placeholder="Please describe the issue..." oninput="onOtherType()"></textarea>
+                </div>
+            </div>
+
+            <!-- Card preview -->
+            <div class="media-column">
+                <div class="thumbnail" id="card-thumbnail">
+                    <svg viewBox="0 0 100 60" style="width:50%;height:50%;">
+                        <rect x="20" y="10" width="60" height="40" rx="8" fill="#909090"/>
+                        <circle cx="35" cy="30" r="4" fill="#fff"/>
+                        <circle cx="50" cy="30" r="4" fill="#fff"/>
+                        <circle cx="65" cy="30" r="4" fill="#fff"/>
+                    </svg>
+                </div>
+                <div class="media-text">
+                    <div class="title" id="card-title-el">Post title</div>
+                    <div class="channel" id="card-author-el">-Author name</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <label class="checkbox-container">
+                <input type="checkbox" id="report-author-check">
+                Report author
+            </label>
+
+            <p class="copyright-text">
+                If you are the copyright owner of this content and believe it has been uploaded without your permission,
+                please follow <a href="#">these directions</a> to submit a copyright infringement notice.
+            </p>
+
+            <div class="actions">
+                <button class="cancel-btn" id="cancel-btn" onclick="goBack()">CANCEL</button>
+                <button class="report-btn" id="report-btn" disabled onclick="submitReport()">REPORT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUCCESS SCREEN -->
+    <div class="success-screen" id="success-screen">
+        <div class="s-icon">✅</div>
+        <div class="s-title">Report submitted</div>
+        <div class="s-sub">Thank you for letting us know. We will review this content and take appropriate action.</div>
+        <button class="done-btn" onclick="goBack()">Done</button>
+    </div>
+</div>
+
+<script>
+// ── URL params se card info load karna ──
+// Usage: report.html?card_id=XYZ&title=Post+Title&author=Author+Name&thumb=https://...
+window.onload = function() {
+    const p = new URLSearchParams(window.location.search);
+    const title  = p.get('title');
+    const author = p.get('author');
+    const thumb  = p.get('thumb');
+
+    if (title)  document.getElementById('card-title-el').textContent  = title;
+    if (author) document.getElementById('card-author-el').textContent = author;
+    if (thumb) {
+        const t = document.getElementById('card-thumbnail');
+        t.innerHTML = `<img src="${escHtml(thumb)}" alt="thumbnail" onerror="this.parentNode.innerHTML='<svg viewBox=\\'0 0 100 60\\' style=\\'width:50%;height:50%\\'><rect x=\\'20\\' y=\\'10\\' width=\\'60\\' height=\\'40\\' rx=\\'8\\' fill=\\'#909090\\'/><circle cx=\\'35\\' cy=\\'30\\' r=\\'4\\' fill=\\'#fff\\'/><circle cx=\\'50\\' cy=\\'30\\' r=\\'4\\' fill=\\'#fff\\'/><circle cx=\\'65\\' cy=\\'30\\' r=\\'4\\' fill=\\'#fff\\'/></svg>'">`;
+    }
+};
+
+// ── Radio select → REPORT button red/active ──
+function onSelect(radio) {
+    const btn = document.getElementById('report-btn');
+    const otherBox = document.getElementById('other-box');
+    const isOther = radio.value === 'Other';
+
+    // Show/hide Other textarea
+    otherBox.classList.toggle('show', isOther);
+
+    if (isOther) {
+        // Enable only if other text is typed
+        const txt = document.getElementById('other-text').value.trim();
+        setReportBtn(txt.length > 0);
+    } else {
+        setReportBtn(true);
+    }
+}
+
+function onOtherType() {
+    const txt = document.getElementById('other-text').value.trim();
+    setReportBtn(txt.length > 0);
+}
+
+function setReportBtn(active) {
+    const btn = document.getElementById('report-btn');
+    btn.disabled = !active;
+    btn.classList.toggle('active', active);
+}
+
+// ── Submit Report → API → success screen ──
+async function submitReport() {
+    const selected = document.querySelector('input[name="report_reason"]:checked');
+    if (!selected) return;
+
+    let reason = selected.value;
+    if (reason === 'Other') {
+        const txt = document.getElementById('other-text').value.trim();
+        if (!txt) return;
+        reason = 'Other: ' + txt;
+    }
+
+    const p = new URLSearchParams(window.location.search);
+    const card_id      = p.get('card_id') || '';
+    const title        = p.get('title')   || '';
+    const author       = p.get('author')  || '';
+    const reportAuthor = document.getElementById('report-author-check').checked;
+
+    const btn = document.getElementById('report-btn');
+    btn.textContent = 'Submitting...';
+    btn.classList.remove('active');
+    btn.disabled = true;
+
+    try {
+        await fetch('/api/reports/post', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ card_id, card_title: title, card_author: author, reason, report_author: reportAuthor })
+        });
+    } catch(e) { /* silent — still show success */ }
+
+    // Show success screen
+    document.getElementById('main-screen').style.display  = 'none';
+    document.getElementById('success-screen').style.display = 'flex';
+}
+
+// ── Close / Cancel ──
+function goBack() {
+    if (window.history.length > 1) history.back();
+    else window.close();
+}
+
+function escHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

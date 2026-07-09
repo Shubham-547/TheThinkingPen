@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Animated Login Form</title>
+    <link rel="stylesheet" href="1.css">
+</head>
+
+<body>
+<section> 
+    <div class="login-box" id="login-form">
+        <form onsubmit="event.preventDefault();">
+            <h2>Login</h2>
+            <div class="input-box">
+                <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                <input type="email" id="login-email" required>
+                <label>Email</label>
+            </div>
+            <div class="input-box">
+                <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                <input type="password" id="login-password" required>
+                <label>Password</label>
+            </div>
+            <button type="button" id="login-b-1" onclick="handleLogin()">Login</button>
+            <div class="divider"><span>OR</span></div>
+            <button type="button" id="login-b-2" onclick="loginWithGoogle('login')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" class="google-icon">
+                Login with Google
+            </button>
+            <div class="register-link">
+                <p>Don't have an account? <a href="#" onclick="showForm('register-form')">Create account</a></p>
+            </div>
+        </form>
+    </div>
+
+    <div class="login-box" id="register-form" style="display: none;">
+        <form onsubmit="event.preventDefault();">
+            <h2>Register</h2> 
+            <div class="input-box">
+                <span class="icon"><ion-icon name="person"></ion-icon></span>
+                <input type="text" id="reg-username" required>
+                <label>Username</label>
+            </div>
+            <div class="input-box">
+                <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                <input type="email" id="reg-email" required>
+                <label>Email</label>
+            </div>
+            <div class="input-box">
+                <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                <input type="password" id="reg-password" required>
+                <label>Password</label>
+            </div>
+            <button type="button" id="reg-b-1" onclick="handleRegister()">Register</button>
+            <div class="divider"><span>OR</span></div>
+            <button type="button" id="reg-b-2" onclick="loginWithGoogle('register')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" class="google-icon">
+                Sign up with Google
+            </button>
+            <div class="register-link">
+                <p>Already have an account? <a href="#" onclick="showForm('login-form')">Login</a></p>
+            </div>
+        </form>
+    </div>
+</section>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="1.js"></script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AK's Literature - Contact Us</title>
+<link rel="stylesheet" href="newfile.css" />
+<style>
+  /* ============ CONTACT US (LANDING) PAGE STYLES ============ */
+  #wv-root{
+    --wv-purple:#7c3aed;
+    --wv-purple-light:#a78bfa;
+    --wv-green:#16a34a;
+    --wv-green-light:#22c55e;
+    --wv-green-dark:#15803d;
+    --wv-text:#f1f1f4;
+    --wv-muted:#9ca3af;
+    --wv-border:rgba(255,255,255,0.1);
+    --wv-field-bg:#0c0c16;
+
+    background: radial-gradient(circle at 50% 0%, #1a0f2e 0%, #070711 45%, #050508 100%);
+    color:var(--wv-text);
+    font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  #wv-root *{box-sizing:border-box;}
+
+  .wv-hero{
+    text-align:center;
+    padding:64px 24px 32px;
+    position:relative;
+  }
+  .wv-eyebrow{
+    color:var(--wv-purple-light);
+    font-weight:600;
+    font-size:16px;
+    margin-bottom:18px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .wv-hero h1{
+    font-size:54px;
+    font-weight:800;
+    line-height:1.15;
+    margin-bottom:18px;
+    color:var(--wv-text);
+  }
+  .wv-hero h1 .wv-grad{
+    color:var(--wv-purple-light);
+  }
+  .wv-subtitle{
+    color:var(--wv-muted);
+    font-size:17px;
+    max-width:560px;
+    margin:0 auto;
+  }
+
+  .wv-cards{
+    display:flex;
+    gap:28px;
+    justify-content:center;
+    max-width:1180px;
+    margin:48px auto 0;
+    padding:0 48px;
+  }
+  .wv-card{
+    flex:1;
+    border-radius:18px;
+    padding:36px 28px;
+    text-align:center;
+    border:1px solid rgba(255,255,255,0.08);
+    position:relative;
+    overflow:hidden;
+  }
+  .wv-card.poem{ background:rgba(124,58,237,0.06); border-color:rgba(124,58,237,0.25);}
+  .wv-card.story{ background:rgba(22,163,74,0.05); border-color:rgba(22,163,74,0.25);}
+  .wv-card.article{ background:rgba(37,99,235,0.05); border-color:rgba(37,99,235,0.25);}
+
+  .wv-card-icon{
+    width:96px;
+    height:96px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 26px;
+    font-size:40px;
+  }
+  .wv-card.poem .wv-card-icon{background:radial-gradient(circle,#9333ea,#6d28d9); box-shadow:0 0 40px rgba(147,51,234,.5);}
+  .wv-card.story .wv-card-icon{background:radial-gradient(circle,#22c55e,#15803d); box-shadow:0 0 40px rgba(34,197,94,.4);}
+  .wv-card.article .wv-card-icon{background:radial-gradient(circle,#3b82f6,#1d4ed8); box-shadow:0 0 40px rgba(59,130,246,.4);}
+
+  .wv-card h3{
+    font-size:24px;
+    margin-bottom:12px;
+    font-weight:700;
+    color:var(--wv-text);
+  }
+  .wv-card p{
+    color:var(--wv-muted);
+    font-size:15px;
+    line-height:1.5;
+    margin-bottom:28px;
+    min-height:48px;
+  }
+  .wv-card button{
+    width:100%;
+    padding:14px 0;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+    color:#fff;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    transition:filter .2s;
+  }
+  .wv-card button:hover{filter:brightness(1.1);}
+  .wv-card.poem button{background:linear-gradient(135deg,#7c3aed,#9333ea);}
+  .wv-card.story button{background:linear-gradient(135deg,#16a34a,#15803d);}
+  .wv-card.article button{background:linear-gradient(135deg,#2563eb,#1e40af);}
+
+  .wv-footer-note{
+    text-align:center;
+    color:#cfcfd6;
+    font-size:16px;
+    padding:48px 24px 60px;
+  }
+
+  @media (max-width: 860px){
+    .wv-hero{padding:36px 20px 18px;}
+    .wv-hero h1{font-size:32px;}
+    .wv-subtitle{font-size:14px;}
+    .wv-eyebrow{font-size:14px;}
+
+    .wv-cards{
+      flex-direction:column;
+      padding:0 20px;
+      margin-top:28px;
+      gap:20px;
+    }
+    .wv-card{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      text-align:left;
+      padding:24px 20px;
+    }
+    .wv-card-icon{
+      width:64px;height:64px;
+      font-size:26px;
+      margin:0 0 18px 0;
+    }
+    .wv-card h3{font-size:20px;}
+    .wv-card p{font-size:14px;min-height:auto;margin-bottom:20px;}
+    .wv-card button{padding:14px 0;border-radius:30px;font-size:15px;}
+
+    .wv-footer-note{font-size:14px;padding:36px 20px 48px;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ SAME SITE HEADER AS HOME PAGE (search + profile) ============ -->
+  <div class="site-header">
+    <div class="header-inner">
+
+      <div class="search-bar">
+        <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" id="search-input" type="text" placeholder="Search articles, poems, stories…" />
+        <button>Search</button>
+      </div>
+
+      <div class="top-profile-nav" style="display: flex; align-items: center;">
+        <img src="default-avatar.png" alt="Profile" id="nav-profile-icon" onclick="window.location.href='profile.html'" style="width: 45px !important; height: 45px !important; border-radius: 50% !important; border: 2px solid #ccc; cursor: pointer; object-fit: cover; box-sizing: border-box;">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ SAME NAVBAR AS HOME PAGE ============ -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="nav-link" href="newfile.html#home">Home</a>
+      <a class="nav-link" href="newfile.html#article">Article</a>
+      <a class="nav-link" href="newfile.html#poem">Poem</a>
+      <a class="nav-link" href="newfile.html#story">Story</a>
+      <a class="nav-link active" href="contact-us.html">Contact Us</a>
+    </div>
+  </nav>
+
+  <!-- ============ LANDING PAGE: Submit Poem / Story / Article ============ -->
+  <div id="wv-root">
+
+    <section class="wv-hero">
+      <div class="wv-eyebrow">✨ Share Your Voice</div>
+      <h1>What would you like to<br><span class="wv-grad">submit today?</span></h1>
+      <p class="wv-subtitle">Choose the type of content you want to share with our community.</p>
+    </section>
+
+    <div class="wv-cards">
+      <div class="wv-card poem">
+        <div class="wv-card-icon">📝</div>
+        <h3>Submit Poem</h3>
+        <p>Express your emotions and creativity through poetry.</p>
+        <button onclick="window.location.href='account-setup.html?type=poem'">Submit Poem &nbsp;→</button>
+      </div>
+
+      <div class="wv-card story">
+        <div class="wv-card-icon">🍃</div>
+        <h3>Submit Story</h3>
+        <p>Share your imagination and inspire with your story.</p>
+        <button onclick="window.location.href='account-setup.html?type=story'">Submit Story &nbsp;→</button>
+      </div>
+
+      <div class="wv-card article">
+        <div class="wv-card-icon">📖</div>
+        <h3>Submit Article</h3>
+        <p>Share your knowledge, insights and perspectives.</p>
+        <button onclick="window.location.href='account-setup.html?type=article'">Submit Article &nbsp;→</button>
+      </div>
+    </div>
+
+    <p class="wv-footer-note">💡 Your words have power. Inspire, educate and connect. ✨</p>
+  </div>
+
+<!-- Load same profile avatar from DB as home page (keeps header consistent) -->
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const res = await fetch('/api/user/profile-data');
+        const data = await res.json();
+        if (data.success && data.avatarUrl) {
+            const navIcon = document.getElementById('nav-profile-icon');
+            if (navIcon) navIcon.src = data.avatarUrl;
+        }
+    } catch (err) {
+        console.error("Avatar loading error:", err);
+    }
+});
+</script>
+
+</body>
+</html>

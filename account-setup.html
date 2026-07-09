@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AK's Literature - Account Setup</title>
+<link rel="stylesheet" href="newfile.css" />
+<style>
+  /* ============ ACCOUNT SETUP (FORM) PAGE STYLES ============ */
+  #wv-root{
+    --wv-purple:#7c3aed;
+    --wv-purple-light:#a78bfa;
+    --wv-green:#16a34a;
+    --wv-green-light:#22c55e;
+    --wv-green-dark:#15803d;
+    --accent:#16a34a;
+    --wv-text:#f1f1f4;
+    --wv-muted:#9ca3af;
+    --wv-border:rgba(255,255,255,0.1);
+    --wv-field-bg:#0c0c16;
+
+    background: radial-gradient(circle at 50% 0%, #1a0f2e 0%, #070711 45%, #050508 100%);
+    color:var(--wv-text);
+    font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  #wv-root *{box-sizing:border-box;}
+
+  .wv-top-section{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:40px 48px 0;
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .wv-title-block h1{
+    font-size:36px;
+    font-weight:800;
+    color:var(--wv-text);
+  }
+  .wv-title-block h1 span{color:var(--wv-green-light);}
+  .wv-title-block p{
+    color:var(--wv-muted);
+    margin-top:10px;
+    font-size:15px;
+  }
+  .wv-feather{
+    font-size:80px;
+    filter:drop-shadow(0 0 25px rgba(34,197,94,.6));
+  }
+
+  .wv-stepper{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    max-width:900px;
+    margin:44px auto 0;
+    padding:0 48px;
+  }
+  .wv-step{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    position:relative;
+  }
+  .wv-step .wv-circle{
+    width:48px;height:48px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700;
+    font-size:17px;
+    border:2px solid rgba(255,255,255,0.2);
+    background:#0c0c16;
+    color:#fff;
+    z-index:2;
+  }
+  .wv-step.active .wv-circle{
+    background:var(--wv-green);
+    border-color:var(--wv-green);
+    box-shadow:0 0 18px rgba(34,197,94,.6);
+  }
+  .wv-step .wv-label{
+    font-size:14px;
+    color:var(--wv-muted);
+    white-space:nowrap;
+  }
+  .wv-step.active .wv-label{color:#fff; font-weight:600;}
+  .wv-line{
+    flex:1;
+    height:2px;
+    background:rgba(255,255,255,0.15);
+    margin:0 8px;
+    position:relative;
+    top:-18px;
+  }
+  .wv-line.filled{background:var(--wv-green);}
+
+  .wv-form-card{
+    max-width:1004px;
+    margin:48px auto 0;
+    padding:36px 44px;
+    background:rgba(255,255,255,0.02);
+    border:1px solid var(--wv-border);
+    border-radius:18px;
+  }
+  .wv-form-header{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    margin-bottom:30px;
+  }
+  .wv-form-header .wv-avatar{
+    width:44px;height:44px;
+    border-radius:50%;
+    background:var(--wv-green);
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px;
+    flex-shrink:0;
+  }
+  .wv-form-header h2{font-size:21px; font-weight:700; color:var(--wv-text);}
+  .wv-form-header p{color:var(--wv-muted); font-size:14px; margin-top:3px;}
+
+  .wv-row{
+    display:flex;
+    gap:24px;
+    margin-bottom:26px;
+  }
+  .wv-field{flex:1;}
+  .wv-field label{
+    display:block;
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:10px;
+    color:var(--wv-text);
+  }
+  .wv-field label .wv-req{color:#ef4444; margin-left:2px;}
+  .wv-field label .wv-opt{color:var(--wv-muted); font-weight:400;}
+
+  .wv-input-wrap{position:relative;}
+  .wv-input-wrap input, .wv-input-wrap select{
+    width:100%;
+    background:var(--wv-field-bg);
+    border:1px solid var(--wv-border);
+    border-radius:10px;
+    padding:13px 42px 13px 16px;
+    color:#fff;
+    font-size:15px;
+    outline:none;
+  }
+  .wv-input-wrap input::placeholder{color:#6b7280;}
+  .wv-input-wrap input:focus, .wv-input-wrap select:focus{border-color:var(--wv-green);}
+
+  /* Fix: browser autofill/suggestion se fill hone par text white/invisible ho jaata tha.
+     Yahan force karte hain ki autofilled text bhi white rahe aur background dark hi rahe.
+     Ye fix input AUR select (jaise +91 country code box) dono par lagaya gaya hai. */
+  #wv-root input:-webkit-autofill,
+  #wv-root input:-webkit-autofill:hover,
+  #wv-root input:-webkit-autofill:focus,
+  #wv-root input:-webkit-autofill:active,
+  #wv-root select:-webkit-autofill,
+  #wv-root select:-webkit-autofill:hover,
+  #wv-root select:-webkit-autofill:focus,
+  #wv-root select:-webkit-autofill:active{
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px var(--wv-field-bg) inset !important;
+    box-shadow: 0 0 0px 1000px var(--wv-field-bg) inset !important;
+    background-color: var(--wv-field-bg) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  /* Firefox ke liye */
+  #wv-root input:autofill,
+  #wv-root select:autofill{
+    filter: none;
+    color: #ffffff !important;
+    background-color: var(--wv-field-bg) !important;
+  }
+
+  .wv-input-wrap .wv-icon{
+    position:absolute;
+    right:14px; top:50%;
+    transform:translateY(-50%);
+    color:#6b7280;
+    font-size:16px;
+    pointer-events:none;
+  }
+  #wv-root select{appearance:none; cursor:pointer;}
+
+  .wv-mobile-row{display:flex; gap:12px;}
+  .wv-code-select{
+    width:100px;
+    background:var(--wv-field-bg);
+    border:1px solid var(--wv-border);
+    border-radius:10px;
+    padding:13px 10px;
+    color:#fff;
+    font-size:15px;
+    outline:none;
+    cursor:pointer;
+  }
+  .wv-mobile-row .wv-input-wrap{flex:1;}
+
+  .wv-otp-row{display:flex; gap:14px;}
+  .wv-otp-row .wv-input-wrap{flex:1;}
+  .wv-send-otp{
+    background:transparent;
+    border:1px solid var(--wv-green);
+    color:var(--wv-green-light);
+    border-radius:10px;
+    padding:0 26px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    white-space:nowrap;
+    transition: background-color .2s, color .2s;
+  }
+  .wv-send-otp:not(:disabled):hover{
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .wv-send-otp:disabled{
+    opacity: .5;
+    cursor: not-allowed;
+  }
+
+  /* Gmail inline error message — sirf jab invalid Gmail ho tab dikhega */
+  .wv-error-text{
+    color:#ef4444;
+    font-size:13px;
+    margin-top:8px;
+    display:none;
+  }
+  .wv-error-text.show{display:block;}
+
+  .wv-submit-btn{
+    width:100%;
+    margin-top:8px;
+    padding:16px 0;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--wv-green),var(--wv-green-dark));
+    color:#fff;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    transition: background-color .2s;
+  }
+  .wv-submit-btn:not(.wv-locked):hover{
+    background: var(--accent);
+    color: #fff;
+  }
+  .wv-submit-btn.wv-locked{
+    background: var(--wv-field-bg) !important;
+    border: 1px solid var(--wv-border);
+    color: #fff;
+    cursor: not-allowed;
+  }
+  .wv-submit-btn.wv-locked:hover{background: var(--wv-field-bg) !important;}
+
+  .wv-draft-note{
+    text-align:center;
+    color:var(--wv-muted);
+    font-size:14px;
+    margin:36px 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+  .wv-draft-note .wv-lock{color:var(--wv-green-light);}
+
+  .wv-foot{
+    border-top:1px solid rgba(255,255,255,0.06);
+    padding:26px 48px;
+    display:flex;
+    justify-content:space-between;
+    color:var(--wv-muted);
+    font-size:14px;
+  }
+  .wv-foot .wv-links{display:flex; gap:30px;}
+  .wv-foot a{color:inherit;text-decoration:none;}
+
+  /* ===== TABLET (601px – 1024px) ===== */
+  @media (min-width: 601px) and (max-width: 1024px){
+    .wv-top-section{ padding:32px 32px 0; }
+    .wv-title-block h1{font-size:30px;}
+    .wv-feather{font-size:64px;}
+
+    .wv-stepper{ padding:0 32px; max-width:760px; }
+    .wv-step .wv-circle{width:42px;height:42px;font-size:16px;}
+
+    .wv-form-card{
+      max-width:90%;
+      margin:40px auto 0;
+      padding:30px 32px;
+    }
+    .wv-row{ gap:18px; }
+
+    .wv-foot{ padding:24px 32px; }
+  }
+
+  /* ===== MOBILE (381px – 600px) ===== */
+  /* ===== MOBILE (481px – 600px) ===== */
+  @media (min-width: 481px) and (max-width: 600px){
+    .wv-top-section{
+      flex-direction:row;
+      padding:24px 20px 0;
+      align-items:flex-start;
+    }
+    .wv-title-block h1{font-size:26px;}
+    .wv-title-block p{font-size:13px;}
+    .wv-feather{font-size:55px;}
+
+    .wv-stepper{padding:0 20px; margin-top:30px;}
+    .wv-step .wv-circle{width:38px;height:38px;font-size:15px;}
+    .wv-step .wv-label{font-size:12px;}
+    .wv-line{margin:0 4px;}
+
+    .wv-form-card{
+      margin:28px 16px 0;
+      padding:22px 18px;
+      border-radius:14px;
+    }
+    .wv-form-header h2{font-size:18px;}
+    .wv-form-header p{font-size:13px;}
+
+    .wv-row{flex-direction:column; gap:22px; margin-bottom:22px;}
+    .wv-otp-row{flex-direction:column; gap:10px;}
+    .wv-send-otp{width:100%; padding:12px 0; font-size:14px;}
+
+    .wv-foot{
+      flex-direction:column;
+      gap:14px;
+      align-items:flex-start;
+      padding:22px 20px;
+    }
+    .wv-foot .wv-links{flex-direction:row; gap:18px; font-size:13px;}
+  }
+
+  /* ===== SMALL MOBILE (≤480px) — iPhone SE, purane/chhote Android phones ===== */
+  @media (max-width: 480px){
+    .wv-top-section{ padding:18px 14px 0; flex-direction:row; align-items:flex-start; gap:10px; }
+    .wv-title-block h1{font-size:20px; line-height:1.25;}
+    .wv-title-block p{font-size:12px;}
+    .wv-feather{font-size:34px; flex-shrink:0;}
+
+    .wv-stepper{ padding:0 10px; margin-top:22px; }
+    .wv-step .wv-circle{width:30px;height:30px;font-size:12px;}
+    .wv-step .wv-label{font-size:9px;}
+    .wv-line{margin:0 2px;}
+
+    .wv-form-card{
+      margin:20px 10px 0;
+      padding:16px 14px;
+      border-radius:12px;
+    }
+    .wv-form-header{gap:10px;}
+    .wv-form-header .wv-avatar{width:36px;height:36px;font-size:16px;}
+    .wv-form-header h2{font-size:16px;}
+    .wv-form-header p{font-size:12px;}
+
+    .wv-field label{font-size:13px;}
+    .wv-input-wrap input, .wv-input-wrap select{
+      padding:11px 36px 11px 13px;
+      font-size:14px;
+    }
+
+    .wv-row{gap:16px; margin-bottom:16px;}
+
+    /* OTP row: chhote screens par button input ke neeche aa jaye, overflow na ho */
+    .wv-otp-row{flex-direction:column; gap:10px;}
+    .wv-send-otp{
+      width:100%;
+      padding:12px 8px;
+      font-size:13px;
+      white-space:normal;
+    }
+
+    .wv-submit-btn{font-size:14px; padding:14px 0;}
+
+    .wv-foot{ padding:18px 14px; gap:10px; }
+    .wv-foot span{font-size:12px;}
+    .wv-foot .wv-links{flex-direction:column; gap:8px; font-size:12px;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ SAME SITE HEADER AS HOME PAGE (search + profile) ============ -->
+  <div class="site-header">
+    <div class="header-inner">
+
+      <div class="search-bar">
+        <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" id="search-input" type="text" placeholder="Search articles, poems, stories…" />
+        <button>Search</button>
+      </div>
+
+      <div class="top-profile-nav" style="display: flex; align-items: center;">
+        <img src="default-avatar.png" alt="Profile" id="nav-profile-icon" onclick="window.location.href='profile.html'" style="width: 45px !important; height: 45px !important; border-radius: 50% !important; border: 2px solid #ccc; cursor: pointer; object-fit: cover; box-sizing: border-box;">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ SAME NAVBAR AS HOME PAGE ============ -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="nav-link" href="newfile.html#home">Home</a>
+      <a class="nav-link" href="newfile.html#article">Article</a>
+      <a class="nav-link" href="newfile.html#poem">Poem</a>
+      <a class="nav-link" href="newfile.html#story">Story</a>
+      <a class="nav-link" href="contact-us.html">Contact Us</a>
+    </div>
+  </nav>
+
+  <!-- ============ ACCOUNT SETUP FORM PAGE ============ -->
+  <div id="wv-root">
+
+    <div class="wv-top-section">
+      <div class="wv-title-block">
+        <h1>Submit Your <span id="wvTypeTitle">Poem</span></h1>
+        <p id="wvTypeDesc">Express your emotions and creativity through poetry.</p>
+      </div>
+      <div class="wv-feather">🪶</div>
+    </div>
+
+    <div class="wv-stepper">
+      <div class="wv-step active">
+        <div class="wv-circle">1</div>
+        <div class="wv-label">Account Setup</div>
+      </div>
+      <div class="wv-line filled"></div>
+      <div class="wv-step">
+        <div class="wv-circle">2</div>
+        <div class="wv-label">Email Verify</div>
+      </div>
+      <div class="wv-line"></div>
+      <div class="wv-step">
+        <div class="wv-circle">3</div>
+        <div class="wv-label">Content Details</div>
+      </div>
+      <div class="wv-line"></div>
+      <div class="wv-step">
+        <div class="wv-circle">4</div>
+        <div class="wv-label">Final Submit</div>
+      </div>
+    </div>
+
+    <div class="wv-form-card">
+      <div class="wv-form-header">
+        <div class="wv-avatar">👤</div>
+        <div>
+          <h2>Account Setup</h2>
+          <p>Create your profile to get started</p>
+        </div>
+      </div>
+
+      <div class="wv-row">
+        <div class="wv-field">
+          <label>First Name <span class="wv-req"></span></label>
+          <div class="wv-input-wrap">
+            <input type="text" id="wvFirstName" placeholder="Enter your first name" required>
+            <span class="wv-icon">👤</span>
+          </div>
+        </div>
+        <div class="wv-field">
+          <label>Surname <span class="wv-opt">(Optional)</span></label>
+          <div class="wv-input-wrap">
+            <input type="text" id="wvSurname" placeholder="Enter your surname">
+            <span class="wv-icon">👤</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wv-row">
+        <div class="wv-field">
+          <label>Age <span class="wv-req">*</span></label>
+          <div class="wv-input-wrap">
+            <input type="number" id="wvAge" placeholder="Enter your age" required min="3" max="100">
+            <span class="wv-icon">🎂</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wv-row">
+        <div class="wv-field">
+          <label>Role <span class="wv-req"></span></label>
+          <div class="wv-input-wrap">
+            <select id="wvRole" required>
+              <option value="">Select your role</option>
+              <option>Student</option>
+              <option>Writer</option>
+              <option>Poet</option>
+              <option>Blogger</option>
+              <option>Other</option>
+            </select>
+            <span class="wv-icon">⌄</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wv-row">
+        <div class="wv-field">
+          <label>Address<span class="wv-req"></span></label>
+          <div class="wv-input-wrap">
+            <input type="text" id="wvAddress" placeholder="Enter your address" required>
+            <span class="wv-icon">📍</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wv-row">
+        <div class="wv-field">
+          <label>Gmail <span class="wv-req">*</span></label>
+          <div class="wv-input-wrap">
+            <input type="email" id="wvEmail" placeholder="Enter your Gmail address" required autocomplete="email">
+            <span class="wv-icon">📧</span>
+          </div>
+          <p class="wv-error-text" id="wvEmailError">Enter a valid Gmail address</p>
+        </div>
+        <div class="wv-field">
+          <label>Password <span class="wv-req">*</span></label>
+          <div class="wv-input-wrap">
+            <input type="password" id="wvPassword" placeholder="Enter your password" required autocomplete="new-password">
+            <span class="wv-icon">🔒</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wv-row">
+        <div class="wv-field">
+          <label>Verify with OTP <span class="wv-req"></span></label>
+          <div class="wv-otp-row">
+            <div class="wv-input-wrap">
+              <input type="text" id="wvOtp" placeholder="Enter 6 digit OTP" maxlength="6" inputmode="numeric" disabled>
+            </div>
+            <button class="wv-send-otp" id="wvSendOtpBtn" disabled>Send OTP</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="wv-submit-btn wv-locked" id="wvContinueBtn" disabled>Continue</button>
+    </div>
+
+    <p class="wv-draft-note"><span class="wv-lock">🔒</span> You can save as draft and continue later.</p>
+
+    <div class="wv-foot">
+      <span>© 2025 WriteVerse. All rights reserved.</span>
+      <div class="wv-links">
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+        <a href="contact-us.html">Contact Us</a>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  // 🔧 TOGGLE: development ke liye false rakho, host/production karte waqt true kar dena
+  const OTP_ENABLED = false;
+
+  // ================= TYPE SETUP (Poem / Story / Article — URL se aata hai) =================
+  const wvData = {
+    poem: { title: 'Poem', desc: 'Express your emotions and creativity through poetry.' },
+    story: { title: 'Story', desc: 'Share your imagination and inspire with your story.' },
+    article: { title: 'Article', desc: 'Share your knowledge, insights and perspectives.' }
+  };
+  const wvParams = new URLSearchParams(window.location.search);
+  const wvType = (wvParams.get('type') || 'poem').toLowerCase();
+  const wvSelected = wvData[wvType] || wvData.poem;
+  document.getElementById('wvTypeTitle').textContent = wvSelected.title;
+  document.getElementById('wvTypeDesc').textContent = wvSelected.desc;
+  document.title = "AK's Literature - Submit " + wvSelected.title;
+
+  // Agar koi /content-detail.html ko bina verification ke access karne ki koshish kare,
+  // server use yahan wapas bhej deta hai — ek chhota alert dikha dete hain.
+  if (wvParams.get('access') === 'denied') {
+    alert("Please complete Account Setup verification (Gmail + Password + OTP) before accessing Content Details.");
+  }
+
+  // ================= FIELD REFERENCES =================
+  const wvFirstName = document.getElementById('wvFirstName');
+  const wvSurname    = document.getElementById('wvSurname');
+  const wvAge        = document.getElementById('wvAge');
+  const wvRole       = document.getElementById('wvRole');
+  const wvAddress    = document.getElementById('wvAddress');
+  const wvEmail      = document.getElementById('wvEmail');
+  const wvPassword   = document.getElementById('wvPassword');
+  const wvOtp        = document.getElementById('wvOtp');
+  const wvSendOtpBtn = document.getElementById('wvSendOtpBtn');
+  const wvContinueBtn = document.getElementById('wvContinueBtn');
+
+  let wvVerifyToken = null;   // server se milta hai jab OTP correct ho
+  let wvCooldownTimer = null;
+  let wvOtpVerified = false;
+
+  // Agar OTP band hai, to Continue button hamesha enabled rahega (development testing ke liye)
+  if (!OTP_ENABLED) {
+    wvContinueBtn.disabled = false;
+    wvContinueBtn.classList.remove('wv-locked');
+  }
+
+  // ================= AGE VALIDATION (3 to 100) =================
+  // User jaise hi field se bahar jaata hai (blur), age check hota hai.
+  wvAge.addEventListener('blur', () => {
+    if (wvAge.value.trim() === "") return; // abhi khaali hai, field touch hi nahi hua
+    const ageVal = parseInt(wvAge.value, 10);
+    if (isNaN(ageVal) || ageVal < 3 || ageVal > 100) {
+      alert("Enter your valid age");
+      wvAge.value = "";
+      wvAge.focus();
+    }
+  });
+
+  function wvIsAgeValid(){
+    const ageVal = parseInt(wvAge.value, 10);
+    return !isNaN(ageVal) && ageVal >= 3 && ageVal <= 100;
+  }
+
+  // ================= GMAIL VALIDATION (inline red error, no alert) =================
+  const wvEmailError = document.getElementById('wvEmailError');
+
+  function wvIsGmailValid(){
+    return /^[^\s@]+@gmail\.com$/i.test(wvEmail.value.trim());
+  }
+
+  function wvCheckGmailInline(){
+    const val = wvEmail.value.trim();
+    if (val === "") {
+      wvEmailError.classList.remove('show');
+      return;
+    }
+    if (!wvIsGmailValid()) {
+      wvEmailError.classList.add('show');
+    } else {
+      wvEmailError.classList.remove('show');
+    }
+  }
+  wvEmail.addEventListener('input', wvCheckGmailInline);
+  wvEmail.addEventListener('blur', wvCheckGmailInline);
+
+  function wvIsPasswordValid(){
+    return wvPassword.value.length >= 6;
+  }
+
+  // ================= OTP VERIFICATION FLOW (ab Gmail par bhejta hai) =================
+  // Security note: client side sirf UI ko enable/disable karta hai.
+  // Asli verification HAMESHA server par hoti hai (/api/otp/send, /api/otp/verify,
+  // /api/account-setup/submit). Koi bhi user devtools se button enable kar le,
+  // server token check fail hone par "Continue" ka real action kabhi nahi chalega.
+
+  function wvAreRequiredFieldsFilled(){
+    return wvFirstName.value.trim() !== "" &&
+           wvIsAgeValid() &&
+           wvRole.value.trim() !== "" &&
+           wvAddress.value.trim() !== "" &&
+           wvIsGmailValid() &&
+           wvIsPasswordValid();
+  }
+
+  // Jaise hi saare required fields sahi se fill ho, Send OTP button enable ho jaata hai
+  function wvUpdateSendOtpState(){
+    if (wvSendOtpBtn.dataset.cooling === "1") return; // cooldown chal raha hai, touch mat karo
+    wvSendOtpBtn.disabled = !wvAreRequiredFieldsFilled();
+  }
+  [wvFirstName, wvSurname, wvAge, wvRole, wvAddress, wvEmail, wvPassword].forEach(el => {
+    el.addEventListener('input', wvUpdateSendOtpState);
+    el.addEventListener('change', wvUpdateSendOtpState);
+  });
+
+  // Agar Gmail change ho jaaye to purani verification invalid kar do (security)
+  wvEmail.addEventListener('input', () => {
+    if (wvOtpVerified) wvLockContinueButton("Email change ho gaya, dobara verify karo.");
+    wvOtp.value = "";
+    wvOtp.disabled = true;
+  });
+
+  function wvStartCooldown(seconds){
+    wvSendOtpBtn.dataset.cooling = "1";
+    wvSendOtpBtn.disabled = true;
+    let remaining = seconds;
+    wvSendOtpBtn.textContent = `Resend in ${remaining}s`;
+    clearInterval(wvCooldownTimer);
+    wvCooldownTimer = setInterval(() => {
+      remaining--;
+      if (remaining <= 0) {
+        clearInterval(wvCooldownTimer);
+        wvSendOtpBtn.dataset.cooling = "0";
+        wvSendOtpBtn.textContent = "Send OTP";
+        wvUpdateSendOtpState();
+      } else {
+        wvSendOtpBtn.textContent = `Resend in ${remaining}s`;
+      }
+    }, 1000);
+  }
+
+  function wvLockContinueButton(msg){
+    wvOtpVerified = false;
+    wvVerifyToken = null;
+    wvContinueBtn.disabled = true;
+    wvContinueBtn.classList.add('wv-locked');
+    if (msg) console.warn(msg);
+  }
+
+  function wvUnlockContinueButton(){
+    wvOtpVerified = true;
+    wvContinueBtn.disabled = false;
+    wvContinueBtn.classList.remove('wv-locked');
+  }
+
+  wvSendOtpBtn.addEventListener('click', async () => {
+    if (!wvAreRequiredFieldsFilled()) {
+      wvCheckGmailInline();
+      return; // koi alert nahi — button anyway disabled rehta hai jab tak fields sahi na ho
+    }
+    wvSendOtpBtn.disabled = true;
+    const email = wvEmail.value.trim();
+
+    try {
+      const res = await fetch('/api/otp/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        wvOtp.disabled = false;
+        wvOtp.value = "";
+        wvLockContinueButton();
+        wvStartCooldown(60); // server bhi yahi 60s cooldown enforce karta hai apni taraf se — koi alert nahi, bas timer chalu
+      } else if (data.secondsLeft) {
+        // Server ne bataya ki cooldown abhi bhi chal rahi hai (e.g. page refresh ke baad) — silently sync karo
+        wvStartCooldown(data.secondsLeft);
+      } else {
+        console.warn(data.message || "OTP send nahi ho paya.");
+        wvUpdateSendOtpState();
+      }
+    } catch (e) {
+      console.warn("Network error — OTP send nahi ho paya.");
+      wvUpdateSendOtpState();
+    }
+  });
+
+  // OTP 6 digit complete hote hi automatically server se verify ho jaata hai
+  wvOtp.addEventListener('input', async () => {
+    wvOtp.value = wvOtp.value.replace(/[^0-9]/g, '');
+    if (wvOtp.value.length !== 6) {
+      wvLockContinueButton();
+      return;
+    }
+    const email = wvEmail.value.trim();
+    try {
+      const res = await fetch('/api/otp/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp: wvOtp.value })
+      });
+      const data = await res.json();
+
+      if (data.success && data.token) {
+        wvVerifyToken = data.token;
+        wvUnlockContinueButton();
+      } else {
+        wvLockContinueButton();
+        alert("Wrong OTP");
+        wvOtp.value = "";
+      }
+    } catch (e) {
+      wvLockContinueButton();
+      alert("Network error — OTP verify nahi ho paya.");
+    }
+  });
+
+  // "Continue to Content Details" — server se token confirm karte hai AUR
+  // poora form data database mein save hota hai (timestamp ke saath: date, month, year, time)
+  wvContinueBtn.addEventListener('click', async () => {
+    if (!OTP_ENABLED) {
+      window.location.href = `content-detail.html?type=${encodeURIComponent(wvType)}`;
+      return;
+    }
+    if (!wvOtpVerified || !wvVerifyToken) return;
+
+    const payload = {
+      type: wvType,
+      firstName: wvFirstName.value.trim(),
+      surname: wvSurname.value.trim(),
+      age: parseInt(wvAge.value, 10),
+      role: wvRole.value,
+      address: wvAddress.value.trim(),
+      email: wvEmail.value.trim(),
+      password: wvPassword.value,
+      token: wvVerifyToken
+    };
+
+    try {
+      const res = await fetch('/api/account-setup/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        // Server ne already secure access-cookie set kar di hai (httpOnly), isliye yahan
+        // bas redirect karna hai — koi token ya credential URL mein nahi bhejna padta.
+        window.location.href = data.redirectTo || '/content-detail.html';
+      } else {
+        wvLockContinueButton("Server token/save check failed.");
+        alert(data.message || "Security check fail ho gaya, dobara OTP verify karein.");
+      }
+    } catch (e) {
+      alert("Network error — please try again.");
+    }
+  });
+</script>
+
+<!-- Load same profile avatar from DB as home page (keeps header consistent) -->
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const res = await fetch('/api/user/profile-data');
+        const data = await res.json();
+        if (data.success && data.avatarUrl) {
+            const navIcon = document.getElementById('nav-profile-icon');
+            if (navIcon) navIcon.src = data.avatarUrl;
+        }
+    } catch (err) {
+        console.error("Avatar loading error:", err);
+    }
+});
+</script>
+
+</body>
+</html>

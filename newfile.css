@@ -1,0 +1,711 @@
+/* Google Fonts Import kar rahe hain: Playfair Display, Lato aur Cinzel */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&family=Cinzel:wght@400;600&display=swap');
+
+/* Sabhi elements ki default padding aur margin hata kar box-sizing ko border-box set kar rahe hain */
+*, *::before, *::after { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+
+/* Root variables: Website ke main colors aur sizes yahan define hain */
+:root {
+  --bg: #09090b;         /* Sabse dark Black/Grey (Main Background) */
+  --surface: #18181b;    /* Dark Grey (Cards aur boxes ke liye) */
+  --surface2: #27272a;   /* Light Grey (Input fields ke liye) */
+  --gold: #ffffff;       /* Pure White (Buttons aur main highlights ke liye) */
+  --gold-light: #e4e4e7; /* Soft Grey (Hover karne par) */
+  --gold-dim: rgba(255, 255, 255, 0.1); /* Transparent White (Borders aur Blur effect ko chamkane ke liye) */
+  --text: #fafafa;       /* Clear White (Padhne wale text ke liye) */
+  --muted: #a1a1aa;      /* Medium Grey (Sub-text aur icons ke liye) */
+  --radius: 12px;        /* Modern rounded corners */
+}
+
+/* Poore webpage ki body aur html styling */
+html, body { 
+    height: 100%; 
+    margin: 0; 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: 'Lato', sans-serif; /* Default text font */
+    /* Page ko left-right hilne (wobbling) se rokne ke liye: */
+    overflow-x: hidden; 
+    scrollbar-gutter: stable;
+}
+
+/* Page content section jisme baaki saare pages load honge */
+#page-content { 
+    min-height: calc(100vh - 112px); /* Header aur Navbar ki height minus kar rahe hain */
+    background: #0d0d0d; 
+}
+
+/* Custom Scrollbar ki styling */
+::-webkit-scrollbar { 
+    width: 6px; /* Scrollbar ki motai */
+}
+::-webkit-scrollbar-track { 
+    background: var(--bg); /* Scrollbar ke peeche ka background */
+}
+::-webkit-scrollbar-thumb { 
+    background: var(--gold-dim); /* Scrollbar thumb (jo move hota hai) ka color */
+    border-radius: 4px; 
+}
+::-webkit-scrollbar-thumb:hover { 
+    background: var(--gold); /* Scrollbar par mouse laane par color */
+}
+
+/* ── HEADER STYLING ── */
+.site-header { 
+    position: sticky; /* Scroll karne par top par chipka rahega */
+    top: 0; 
+    z-index: 100; /* Dusre elements ke upar dikhane ke liye */
+    background: rgba(13,13,13,.95); 
+    backdrop-filter: blur(10px); /* Peeche ka content blur dikhega */
+    border-bottom: 1px solid var(--gold-dim); 
+    padding: 0 24px; 
+}
+.header-inner { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    display: flex; /* Elements ko ek line me lane ke liye */
+    align-items: center; 
+    gap: 20px; 
+    height: 68px; 
+}
+
+/* Search bar styling */
+.search-bar { 
+    flex: 1; 
+    max-width: 480px; 
+    margin: 0 auto; 
+    position: relative; 
+    display: flex; 
+    align-items: center; 
+    gap: 5px;
+}
+.search-icon { 
+    position: absolute; 
+    left: 12px; 
+    color: var(--muted); 
+    pointer-events: none; /* Icon par click ignore hoga */
+    width: 16px; 
+    height: 16px; 
+}
+.search-input { 
+    width: 100%; 
+    padding: 9px 14px 9px 38px; 
+    background: var(--surface2); 
+    border: 1px solid var(--gold-dim); 
+    border-radius: 5px 0 0 5px; 
+    color: var(--text); 
+    font-size: .9rem; 
+    outline: none; 
+}
+.search-input:focus { 
+    border-color: var(--gold); /* Typing start karne par border color */
+}
+.search-bar button {
+    padding: 8px 15px;
+    background-color: #d97736;
+    border: 1.5px solid #d97736; 
+    color: white;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+/* Profile Nav Design */
+.top-profile-nav {
+    display: flex;
+    align-items: center;
+    margin-left: 15px; /* Search bar se thoda gap rakhne ke liye */
+}
+#nav-profile-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%; /* Image ko perfect gol banane ke liye */
+    border: 2px solid #ccc;
+    cursor: pointer;
+    object-fit: cover; /* Image stretcth na ho isliye */
+    transition: transform 0.2s ease; /* Hover animation time */
+}
+#nav-profile-icon:hover {
+    transform: scale(1.1); /* Hover karne par thoda bada (zoom in) hoga */
+    border-color: #00bcd4;
+}
+
+/* ── NAVBAR (Sticky Navigation) ── */
+.navbar { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: sticky; 
+    top: 68px; /* Header ki height ke theek neeche fix hoga */
+    z-index: 99; 
+    background: rgba(22, 22, 22, 0.95); 
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--gold-dim); 
+    padding: 0 24px; 
+}
+.nav-inner { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    display: flex; 
+    align-items: center; 
+    gap: 4px; 
+    height: 44px; 
+    overflow-x: auto; /* Agar choti screen ho to left-right scroll ho sake */
+    scrollbar-width: none; 
+}
+.nav-inner::-webkit-scrollbar { 
+    display: none; /* Navbar ke neeche wala scrollbar hide karne ke liye */
+}
+.nav-link { 
+    font-family: 'Cinzel', serif; 
+    font-size: .82rem; 
+    color: var(--muted); 
+    text-decoration: none; 
+    padding: 6px 16px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    white-space: nowrap; /* Text ko agle line me break hone se rokne ke liye */
+    transition: 0.2s; 
+}
+.nav-link:hover, .nav-link.active { 
+    color: var(--gold); 
+    background: var(--gold-dim); 
+}
+
+/* ── HERO SECTION (Banner) ── */
+.hero-section {
+    /* Background me image aur black overlay set kar rahe hain */
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=1200') no-repeat center center/cover;
+    min-height: 300px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    padding: 40px 8%;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.hero-content {
+    max-width: 55%;
+    text-align: center;
+    min-width: 250px;
+    flex: 1;
+    text-align: left;
+}
+.hero-content h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+.hero-content p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+.btn{
+    display: block;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    color: #ffffff;
+    background-color: #d97736;
+    transition: background-color 0.3s ease;
+}
+.btn.btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.hero-section img {
+    height: 280px;
+    width: 280px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+/* Section Headings aur Layout */
+.section-head { 
+    display: flex; 
+    align-items: center; 
+    gap: 14px; 
+    margin-bottom: 28px; 
+}
+.section-head h2 { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 1.6rem; 
+    color: var(--text); 
+}
+.section-head .rule { 
+    flex: 1; /* Line ko baaki bachi jagah lene ke liye */
+    height: 1px; 
+    background: var(--gold-dim); 
+}
+.section-head .badge { 
+    font-family: 'Cinzel', serif; 
+    font-size: .7rem; 
+    color: var(--gold); 
+    border: 1px solid var(--gold-dim); 
+    padding: 3px 10px; 
+    border-radius: 12px; 
+}
+
+/* Grids for cards layout */
+.featured-section, .page-section { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 48px 24px; 
+}
+.featured-grid, .cards-grid, .poem-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Automatically responsive grid banayega */
+    gap: 24px; 
+}
+
+/* ── CARDS DESIGN ── */
+.card { 
+    background: var(--surface); 
+    border: 1px solid var(--gold-dim); 
+    border-radius: var(--radius); 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; 
+    position: relative; 
+    transition: transform .2s, border-color .2s; 
+}
+.card:hover { 
+    transform: translateY(-4px); /* Hover karne par card upar uthega */
+    border-color: rgba(201,168,76,.45); 
+}
+
+/* Card Image Section */
+.card-img-wrap { 
+    position: relative; 
+    height: 220px; 
+    overflow: hidden; 
+    background: #111; 
+}
+.card-img-wrap img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    transition: transform .4s; 
+}
+.card:hover .card-img-wrap img { 
+    transform: scale(1.00); /* Image zoom effect */
+}
+.card-type-badge { 
+    position: absolute; 
+    top: 10px; 
+    left: 10px; 
+    font-family: 'Cinzel', serif; 
+    font-size: .66rem; 
+    background: rgba(13,13,13,.85); 
+    color: var(--gold); 
+    padding: 3px 10px; 
+    border-radius: 12px; 
+    border: 1px solid var(--gold-dim); 
+}
+
+/* Card Body Section */
+.card-body { 
+    padding: 16px; 
+    flex: 1; /* Body ko poori jagah cover karne ke liye */
+    display: flex; 
+    flex-direction: column; 
+    gap: 6px; 
+}
+.card-title { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 1.05rem; 
+    font-weight: 600; 
+    color: var(--text); 
+    line-height: 1.4; 
+}
+.card-desc { 
+    font-size: .875rem; 
+    color: var(--muted); 
+    flex: 1; 
+    line-height: 1.55; 
+}
+.card-author { 
+    font-size: .8rem; 
+    color: var(--gold); 
+    font-style: italic; 
+    margin-top: 4px; 
+}
+
+/* Card Footer (Buttons area) */
+.card-footer { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 10px 16px; 
+    border-top: 1px solid var(--gold-dim); 
+}
+
+/* ── CARD BUTTONS (Like & Options) ── */
+.like-btn { 
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+    color: var(--muted); 
+    font-size: .82rem; 
+    padding: 4px 8px; 
+    border-radius: 6px; 
+    font-family: 'Lato', sans-serif; 
+    transition: color .2s; 
+}
+.like-btn.liked { 
+    color: var(--gold); /* Jab click karke like ho jaye */
+}
+.like-icon { 
+    width: 17px; 
+    height: 17px; 
+    stroke: #c9a84c; 
+    fill: none; 
+    transition: fill .2s; 
+}
+.like-btn.liked .like-icon { 
+    fill: #c9a84c; /* Like icon color bharega */
+}
+.like-btn:hover { 
+    background: var(--gold-dim); 
+}
+
+/* 3-Dot Options menu wrapper */
+.dot-wrap { 
+    position: relative; 
+}
+.dot-btn { 
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+    color: var(--muted); 
+    font-size: 1.2rem; 
+    padding: 4px 8px; 
+    border-radius: 6px; 
+    display: flex; 
+    align-items: center;
+}
+.dot-btn:hover { 
+    color: var(--gold); 
+    background: var(--gold-dim); 
+}
+/* Hidden Dropdown Menu (Comment trigger open hone par dikhega) */
+.dot-menu { 
+    width: 175px;
+    height: 175px;
+    display: none; /* By default hidden rahega, JS isko dikhayega */
+    position: absolute; 
+    right: 0; 
+    bottom: 36px; 
+    background: var(--surface2); 
+    border: 1px solid var(--gold-dim); 
+    border-radius: 8px; 
+    z-index: 50; 
+    min-width: 150px; 
+    box-shadow: 0 8px 24px rgba(0,0,0,.6); 
+    overflow: hidden; 
+}
+.inside-dot-menu{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 6px;
+    padding: 22px 10px 22px 10px;
+}
+.comment-trigger {
+    padding: 10px 16px; 
+    font-size: .875rem; 
+    color: var(--text); 
+    background: #171716bf;
+    border-radius: 10px;
+    cursor: pointer; 
+    transition: background .15s; 
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.comment-trigger:hover { 
+    background: var(--gold-dim); 
+    color: var(--gold); 
+}
+.save-trigger { 
+    padding: 10px 16px; 
+    font-size: .875rem; 
+    color: var(--text); 
+    background: #171716bf;
+    border-radius: 10px;
+    cursor: pointer; 
+    transition: background .15s; 
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.save-trigger:hover { 
+    background: var(--gold-dim); 
+    color: var(--gold); 
+}
+.report-trigger { 
+    padding: 10px 16px; 
+    font-size: .875rem; 
+    color: var(--text); 
+    background: #171716bf;
+    border-radius: 10px;
+    cursor: pointer; 
+    transition: background .15s; 
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.report-trigger:hover { 
+    background: var(--gold-dim); 
+    color: var(--gold); 
+}
+
+/* ── MISCELLANEOUS STYLING ── */
+.page-head-label { 
+    font-family: 'Cinzel', serif; 
+    font-size: 2rem; 
+    color: var(--gold); 
+    text-align: center; 
+    margin-bottom: 8px; 
+}
+.page-head-sub { 
+    text-align: center; 
+    color: var(--muted); 
+    font-size: .95rem; 
+    margin-bottom: 20px; 
+}
+.divider-gold { 
+    width: 60px; 
+    height: 2px; 
+    background: var(--gold); 
+    margin: 12px auto 40px; 
+    border-radius: 2px; 
+}
+
+/* 🌟 Poem page ke liye 220px height 🌟 */
+.poem-card-img { 
+    height: 220px; 
+}
+
+/* 🌟 Story page (Video) ke liye 220px height 🌟 */
+.story-card-video-wrap { 
+    position: relative; 
+    height: 220px; 
+    background: #111; 
+}
+
+/* 🌟 ARTICLE PAGE KE LIYE (Double Ensure karne ke liye explicit 220px size) 🌟 */
+#article-grid .card-img-wrap {
+    height: 220px;
+}
+
+.story-video { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    cursor: pointer; 
+}
+.story-play-overlay { 
+    position: absolute; 
+    inset: 0; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: rgba(0,0,0,.35); 
+    pointer-events: none; 
+}
+
+/* ── CONTACT FORM STYLING ── */
+.contact-wrap { 
+    max-width: 560px; 
+    margin: 60px auto; 
+    padding: 0 24px; 
+}
+.contact-form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 16px; 
+}
+.form-group { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 6px; 
+}
+.form-label { 
+    font-family: 'Cinzel', serif; 
+    font-size: .78rem; 
+    color: var(--gold); 
+    letter-spacing: .08em; 
+}
+.form-input, .form-textarea { 
+    background: var(--surface2); 
+    border: 1px solid var(--gold-dim); 
+    border-radius: 8px; 
+    padding: 10px 14px; 
+    color: var(--text); 
+    outline: none; 
+    font-family: 'Lato', sans-serif; 
+    transition: border-color .2s; 
+}
+.form-input:focus, .form-textarea:focus { 
+    border-color: var(--gold); 
+}
+.form-textarea { 
+    min-height: 120px; 
+    resize: vertical; /* Sirf upar-neeche drag karne ka option */
+}
+.form-btn { 
+    background: var(--gold); 
+    color: #0d0d0d; 
+    border: none; 
+    border-radius: 8px; 
+    padding: 12px 24px; 
+    cursor: pointer; 
+    font-weight: 600; 
+    font-family: 'Cinzel', serif; 
+    transition: background .2s; 
+    letter-spacing: .1em; 
+}
+.form-btn:hover { 
+    background: var(--gold-light); 
+}
+
+/* ── MODAL (Comment Popup Box) STYLING ── */
+.modal-backdrop { 
+    position: fixed; 
+    inset: 0; 
+    z-index: 200; 
+    background: rgba(0,0,0,.75); /* Peeche ka black transparent background */
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 20px; 
+}
+.modal-box { 
+    background: var(--surface); 
+    border: 1px solid var(--gold-dim); 
+    border-radius: 12px; 
+    padding: 24px; 
+    width: 100%; 
+    max-width: 440px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 14px; 
+}
+.modal-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+}
+.modal-title { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 1.05rem; 
+}
+.modal-close { 
+    background: none; 
+    border: none; 
+    color: var(--muted); 
+    font-size: 1.4rem; 
+    cursor: pointer; 
+    line-height: 1; 
+}
+.modal-textarea { 
+    background: var(--surface2); 
+    border: 1px solid var(--gold-dim); 
+    border-radius: 8px; 
+    padding: 10px 14px; 
+    color: var(--text); 
+    min-height: 100px; 
+    outline: none; 
+    font-family: 'Lato', sans-serif; 
+    resize: vertical; 
+    width: 100%; 
+}
+.modal-textarea:focus { 
+    border-color: var(--gold); 
+}
+.comment-submit { 
+    background: var(--gold); 
+    color: #0d0d0d; 
+    border: none; 
+    border-radius: 8px; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+    font-weight: 600; 
+    font-family: 'Cinzel', serif; 
+    align-self: flex-end; 
+    transition: background .2s; 
+}
+.comment-submit:hover { 
+    background: var(--gold-light); 
+}
+
+/* ── FOOTER STYLING ── */
+.site-footer { 
+    text-align: center; 
+    padding: 28px 24px; 
+    border-top: 1px solid var(--gold-dim); 
+    font-size: .82rem; 
+    color: var(--muted); 
+}
+.site-footer span { 
+    color: var(--gold); 
+}
+@media (max-width: 768px) {
+    .hero-content {
+        max-width: 100%;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+}
+
+/* ── REPORT MODAL STYLING (From your report.html) ── */
+.report-modal-container { background: #ffffff; width: 100%; max-width: 680px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 24px; display: flex; flex-direction: column; color: #0f0f0f; font-family: "Roboto", Arial, sans-serif; position: relative; }
+.report-modal-container .drag-handle { display: none; }
+.report-modal-container .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.report-modal-container .header h2 { font-size: 20px; font-weight: 500; color: #0f0f0f; order: 1; font-family: "Roboto", sans-serif; }
+.report-modal-container .close-icon { font-size: 24px; color: #606060; cursor: pointer; order: 2; }
+.report-modal-container .sub-header { font-size: 15px; color: #0f0f0f; margin-bottom: 16px; text-align: left; }
+.report-modal-container .main-content { display: flex; gap: 24px; }
+.report-modal-container .options-column { flex: 1; }
+.report-modal-container .radio-option { display: flex; align-items: center; margin-bottom: 16px; cursor: pointer; font-size: 14px; color: #0f0f0f; }
+.report-modal-container .radio-option input[type="radio"] { width: 20px; height: 20px; margin-right: 16px; accent-color: #065fd4; cursor: pointer; }
+.report-modal-container .help-icon { display: inline-flex; justify-content: center; align-items: center; width: 16px; height: 16px; border: 1px solid #909090; border-radius: 50%; color: #606060; font-size: 11px; margin-left: 8px; cursor: pointer; }
+.report-modal-container .media-column { width: 240px; display: flex; flex-direction: column; }
+.report-modal-container .thumbnail { width: 100%; height: 135px; background-color: #e5e5e5; border-radius: 8px; display: flex; justify-content: center; align-items: center; margin-bottom: 12px; }
+.report-modal-container .media-text { text-align: left;}
+.report-modal-container .media-text .title { font-size: 14px; font-weight: 400; color: #0f0f0f; margin-bottom: 4px; }
+.report-modal-container .media-text .channel { font-size: 13px; color: #606060; }
+.report-modal-container .bottom-section { margin-top: 20px; border-top: 1px solid #e5e5e5; padding-top: 16px; text-align: left; }
+.report-modal-container .copyright-text { display: none; font-size: 12px; color: #606060; margin-top: 16px; line-height: 1.5; }
+.report-modal-container .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+.report-modal-container .cancel-btn { background: transparent; border: none; color: #065fd4; font-weight: 500; font-size: 14px; padding: 10px 16px; border-radius: 18px; cursor: pointer; font-family: "Roboto", sans-serif;}
+.report-modal-container .next-btn { background: #f2f2f2; border: none; color: #909090; font-weight: 500; font-size: 14px; padding: 10px 16px; border-radius: 18px; cursor: not-allowed; font-family: "Roboto", sans-serif;}
+
+@media (max-width: 600px) {
+    .report-modal-container { max-width: 100%; border-radius: 16px 16px 0 0; padding: 16px; height: 95vh; overflow-y: auto; align-self: flex-end;}
+    #report-modal-backdrop { align-items: flex-end; }
+    .report-modal-container .drag-handle { display: block; width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 16px auto; }
+    .report-modal-container .header { justify-content: flex-start; gap: 16px; margin-bottom: 24px; }
+    .report-modal-container .header h2 { order: 2; }
+    .report-modal-container .close-icon { order: 1; }
+    .report-modal-container .main-content { flex-direction: column; gap: 16px; }
+    .report-modal-container .media-column { width: 100%; flex-direction: row; align-items: center; gap: 16px; border-top: 1px solid #e5e5e5; padding-top: 16px; }
+    .report-modal-container .thumbnail { width: 120px; height: 68px; margin-bottom: 0; }
+    .report-modal-container .copyright-text { display: block; }
+    .report-modal-container .actions { justify-content: flex-end; gap: 16px; margin-top: 24px; margin-bottom: 10px; }
+}

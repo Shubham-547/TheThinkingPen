@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AK's Literature</title>
+  <link rel="stylesheet" href="newfile.css" />
+</head>
+<body>
+
+  <div class="site-header">
+    <div class="header-inner">
+      
+      <div class="search-bar">
+        <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" id="search-input" type="text" placeholder="Search articles, poems, stories…" />
+        <button>Search</button>
+      </div>
+
+      <div class="top-profile-nav" style="display: flex; align-items: center;">
+                <img src="default-avatar.png" alt="Profile" id="nav-profile-icon" onclick="window.location.href='profile.html'" style="width: 45px !important; height: 45px !important; border-radius: 50% !important; border: 2px solid #ccc; cursor: pointer; object-fit: cover; box-sizing: border-box;">
+            </div>
+
+    </div>
+  </div>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="nav-link active" data-page="home" href="#">Home</a>
+      <a class="nav-link" data-page="article" href="#">Article</a>
+      <a class="nav-link" data-page="poem" href="#">Poem</a>
+      <a class="nav-link" data-page="story" href="#">Story</a>
+      <a class="nav-link" href="contact-us.html">Contact Us</a>
+    </div>
+  </nav>
+
+  <div id="page-content">
+
+    <div id="page-home" class="page-section-container" style="display: block;">
+      
+      <section class="hero-section" id="hero-section">
+        <div class="hero-content">
+            <h2 id="hero-title-text">Art & Literature: Fresh Thoughts...</h2>
+            <p id="hero-desc-text">Welcome to a beautiful world...</p>
+            <a href="#" class="btn" id="hero-read-now-btn">Read Now</a>
+        </div>
+        <div class="main-logo">
+        <img id="hero-logo-img" src="img.3.png" alt="Logo"></div>
+      </section>
+
+      <section class="featured-section">
+        <div class="section-head">
+          <h2>Featured</h2><div class="rule"></div><span class="badge">Latest Picks</span>
+        </div>
+        
+        <div class="featured-grid" id="featured-grid">
+          <!-- Cards yahan JS (newfile.js) se /api/content/cards se dynamically load hote hain -->
+        </div>
+      </section>
+    </div>
+
+    <div id="page-article" class="page-section-container" style="display: none;">
+      <section class="page-section">
+        <h1 class="page-head-label">Articles</h1>
+        <p class="page-head-sub">Thoughts that challenge, inspire, and ignite change.</p>
+        <div class="divider-gold"></div>
+        
+        <div class="cards-grid" id="article-grid">
+          <!-- Article cards yahan JS se /api/content/cards?page=article se dynamically load hote hain -->
+        </div>
+      </section>
+    </div>
+
+    <div id="page-poem" class="page-section-container" style="display: none;">
+      <section class="page-section">
+        <h1 class="page-head-label">Poems</h1>
+        <p class="page-head-sub">Soulful verses that speak what words alone cannot.</p>
+        <div class="divider-gold"></div>
+        
+        <div class="poem-grid" id="poem-grid">
+          <!-- Poem cards yahan JS se /api/content/cards?page=poem se dynamically load hote hain -->
+        </div>
+      </section>
+    </div>
+
+    <div id="page-story" class="page-section-container" style="display: none;">
+      <section class="page-section">
+        <h1 class="page-head-label">Stories</h1>
+        <p class="page-head-sub">Tales that linger long after the last word.</p>
+        <div class="divider-gold"></div>
+        
+        <div class="cards-grid" id="story-grid">
+          <!-- Story cards yahan JS se /api/content/cards?page=story se dynamically load hote hain -->
+        </div>
+      </section>
+    </div>
+
+    <div id="page-search" class="page-section-container" style="display: none;">
+      <section class="page-section">
+        <h1 class="page-head-label">Search Results</h1>
+        <p class="page-head-sub" id="search-result-sub">&nbsp;</p>
+        <div class="divider-gold"></div>
+
+        <div class="cards-grid" id="search-grid">
+          <!-- Search results yahan JS se /api/content/search?q= se dynamically load hote hain -->
+        </div>
+      </section>
+    </div>
+
+  </div> <footer class="site-footer">
+    &copy; 2024 <span>AK's Literature</span> &mdash; Words that awaken minds. Ideas that change worlds.
+  </footer>
+
+  <div id="comment-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title-text">Comment</span>
+        <button class="modal-close" id="modal-close-btn">&times;</button>
+      </div>
+      <textarea class="modal-textarea" id="modal-textarea" placeholder="Share your thoughts..."></textarea>
+      <button class="comment-submit" id="modal-submit-btn">Post Comment</button>
+      <div class="comment-success" id="modal-success-msg" style="display:none">Comment posted! Thank you.</div>
+    </div>
+  </div>
+
+                       <!----------report_section------------->
+                                
+  <div id="report-modal-backdrop" class="modal-backdrop" style="display: none; z-index: 9999;">
+    <div class="report-modal-container">
+        <div class="drag-handle"></div>
+        <div class="header">
+            <span class="close-icon" id="close-report-modal">&#10005;</span>
+            <h2>Report content</h2>
+        </div>
+        <div class="sub-header">What is the issue ?</div>
+        <div class="main-content">
+            <div class="options-column">
+                <label class="radio-option"><input type="radio" name="report_reason">Misinformation / Fake News<span class="help-icon">?</span></label>
+                <label class="radio-option"><input type="radio" name="report_reason">Plagiarism / Copied Content<span class="help-icon">?</span></label>
+                <label class="radio-option"><input type="radio" name="report_reason">Hate Speech / Harassment<span class="help-icon">?</span></label>
+                <label class="radio-option"><input type="radio" name="report_reason">Low Quality / Gibberish<span class="help-icon">?</span></label>
+            </div>
+            <div class="media-column">
+                <div class="thumbnail">
+                    <svg viewBox="0 0 100 60" style="width: 50%; height: 50%;"><rect x="20" y="10" width="60" height="40" rx="8" fill="#909090" /><circle cx="35" cy="30" r="4" fill="#ffffff" /><circle cx="50" cy="30" r="4" fill="#ffffff" /><circle cx="65" cy="30" r="4" fill="#ffffff" /></svg>
+                </div>
+                <div class="media-text">
+                    <div class="title" id="report-card-title">Card title</div>
+                    <div class="channel">Author name</div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-section">
+            <p class="copyright-text">If you are the copyright owner of this content and believe it has been uploaded without your permission, please follow directions to submit a copyright infringement notice.</p>
+            <div class="actions">
+                <button class="cancel-btn" id="cancel-report-btn">CANCEL</button>
+                <button class="next-btn" id="next-report-btn" disabled>NEXT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+  <script src="newfile.js"></script>
+
+  <script>
+// NAYA CODE: Database se Profile Photo Load karne ke liye
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const res = await fetch('/api/user/profile-data');
+        const data = await res.json();
+        if (data.success && data.avatarUrl) {
+            const navIcon = document.getElementById('nav-profile-icon');
+            if (navIcon) navIcon.src = data.avatarUrl;
+        }
+    } catch (err) {
+        console.error("Avatar loading error:", err);
+    }
+});
+
+// AAPKA PURANA CODE: FIXED: Sabhi variables ko descriptive naam de diya gaya hai
+document.addEventListener("DOMContentLoaded", () => {
+  const articleImage = document.querySelector('#img-1');
+  if(articleImage) {
+    articleImage.addEventListener("click", () => {
+      window.location.href = 'Page-Article/page-article1.0.html';
+    });
+  }
+
+  const articleContent = document.querySelector('#card-content-1');
+  if(articleContent) {
+    articleContent.addEventListener("click", () => {
+      window.location.href = 'Page-Article/page-article1.0.html';
+    });
+  }
+
+  const poemImage = document.querySelector('#img-2');
+  if(poemImage) {
+    poemImage.addEventListener("click", () => {
+      window.location.href = 'Page-Poem/poem.8.jpg';
+    });
+  }
+
+  const poemContent = document.querySelector('#card-content-2');
+  if(poemContent) {
+    poemContent.addEventListener("click", () => {
+      window.location.href = 'Page-Poem/poem.8.jpg';
+    });
+  }
+
+  const storyImage = document.querySelector('#img-4');
+  if(storyImage) {
+    storyImage.addEventListener("click", () => {
+      alert(`Coming Soon`);
+    });
+  }
+
+  const storyContent = document.querySelector('#card-content-3');
+  if(storyContent) {
+    storyContent.addEventListener("click", () => {
+      alert(`Coming Soon`);
+    });
+  }
+});
+</script>
+</html>

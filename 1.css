@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght=300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+section {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("bg.jpg") no-repeat;
+    background-size: cover;
+    background-position: center;
+    animation: animateBg 5s linear infinite;
+    z-index: -1;
+}
+
+@keyframes animateBg {
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
+
+.login-box {
+    position: relative;
+    width: 400px;
+    height: 500px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, .5);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(15px);
+}
+#register-form{
+    height: 550px;
+}
+
+h2 { 
+    font-size: 2em; 
+    color: #fff;
+    text-align: center;
+}
+ /* Stronger Browser Autofill Transparent Fix */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-background-clip: text !important; /* Ye background ko hide karke transparent rakhega */
+    -webkit-text-fill-color: #fff !important; /* Text ka color white rakhega */
+    transition: background-color 5000s ease-in-out 0s !important;
+    box-shadow: inset 0 0 20px 20px transparent !important;
+}
+.input-box {
+    position: relative;
+    width: 310px;
+    margin: 30px 0;
+    border-bottom: 2px solid #fff;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: #fff;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label,
+.input-box input.has-val ~ label {
+    top: -5px; 
+    font-size: 0.85em; 
+    color: #00bcd4; 
+}
+
+.input-box input {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    color: #fff;
+    padding: 0 35px 0 5px;
+}
+
+.input-box .icon {
+    position: absolute;
+    right: 7px;
+    color: #fff;
+    font-size: 1.2em;
+    bottom: 15px; 
+}
+
+.remember-forgot {
+    margin: -15px 0 15px;
+    font-size: .9em;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.remember-forgot label input {
+    margin-right: 3px;
+}
+
+.remember-forgot a {
+    color: blue;
+    text-decoration: none;
+}
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+    color: #6354d1;
+}
+
+button {
+    width: 100%;
+    height: 40px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s ease;
+}
+
+/* FIXED Selectors for new unique IDs */
+button#login-b-1, button#reg-b-1 {
+    color: #ffffff !important;
+    background-color: #0000ff !important;
+}
+
+button#login-b-1:hover, button#reg-b-1:hover {
+    background-color: #0000cc !important;
+    transform: translateY(-2px);
+}
+
+button#login-b-2, button#reg-b-2 {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+}
+
+button#login-b-2:hover, button#reg-b-2:hover {
+    background-color: #e6e6e6 !important;
+    transform: translateY(-2px);
+}
+
+.divider{
+    margin: 15px 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.google-icon {
+    height: 22px;
+    margin-right: 10px;
+    filter: none !important;
+}
+
+.register-link {
+    font-size: .9em;
+    color: #fff;
+    text-align: center;
+    margin: 25px 0 10px;
+}
+
+.register-link p a {
+    color: blue;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.register-link p a:hover {
+    text-decoration: underline;
+    color: #6354d1;
+}
+
+@media (max-width: 500px) {
+    html{
+        width: 100vw;
+        height: 90vh;
+    }
+
+    .login-box {
+        position: relative;
+    width: 90%;
+    height: 70vh;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, .5);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(15px);
+    }
+    .input-box {
+        width: 290px;
+    }
+}
+
+@media (max-width: 360px) {
+    .login-box {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+    }
+    .input-box {
+        width: 290px;
+    }
+}
